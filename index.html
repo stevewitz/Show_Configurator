@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<script src= "./public/javascript/index.js"></script>
+<link rel="stylesheet" href="./public/css/index.css">
+
+<html>
+    <head>
+        <meta charset = "UTF-8">
+        <title>Show Configurator</title>
+    </head>
+
+
+    <body>
+
+            <h2 align="center"> Show Configurator</h2>
+
+
+
+
+            <div id="Welcome">Please Drag Welcome Screen Here</div>
+
+            <script>
+
+            </script>
+
+
+        <form id="wizdat">
+
+            <label for="ShowName">ShowName:</label> <input type="text" id="ShowName" name="ShowName"><br>
+
+            <p>   Please Select Startup State:</p>
+            <input type="radio" class="startup" id="manualStartup" name="StartUp" value="1">
+            <label for="manualStartup">Start up: Menu</label>
+            <input type="radio" class="startup" id="autoStartup" name="StartUp" value="0" checked>
+            <label for="autoStartup">Start up: Automatic (with no user selection)</label><br>
+
+            <p>Zigbee Settings</p>
+            <label for="PanID">PanID:</label> <input type="text" id="PanID" name="PanID" value="301"><br>
+
+            <p>WIFI Settings</p>
+            <label for="SSID">SSID:</label> <input type="text" id="SSID" name="SSID">
+            <label for="Pass">Passphrase:</label> <input type="text" id="Pass" name="Pass"><br>
+
+            <p>Main Screen Settings</p>
+            <label for="FadeIn">Fade In Time:</label> <input type="text" id="FadeIn" name="FadeIn">
+            <label for="OnTime">On Time:</label> <input type="text" id="OnTime" name="OnTime"><br>
+            <label for="FadeOut">Fade Out Time:</label> <input type="text" id="FadeOut" name="FadeOut">
+            <label for="Backlight">Backlight Level( 1-100):</label> <input type="text" id="Backlight" name="Backlight"><br>
+
+            <p>Audio Settings</p>
+            <label for="Volume">Audio Volume:</label> <input type="text" id="Volume" name="Volume"><br>
+
+            <p>I6 Screen Settings</p>
+            <label for="I6_FadeIn">I6_Fade In Time:</label> <input type="text" id="I6_FadeIn" name="I6_FadeIn">
+            <label for="I6_OnTime">I6_On Time:</label> <input type="text" id="I6_OnTime" name="I6_OnTime"><br>
+            <label for="I6_FadeOut">I6_Fade Out Time:</label> <input type="text" id="I6_FadeOut" name="I6_FadeOut">
+            <label for="I6_Backlight">I6_Backlight Level( 1-100):</label> <input type="text" id="I6_Backlight" name="I6_Backlight"><br>
+            <p>   Please Select I6 Orientation:</p>
+            <input type="radio" class="I6_Orientation" id="I6_OrientationL" name="I6_Orientation" value="L">
+            <label for="I6_OrientationL">Orientation Left)</label>
+            <input type="radio" class="I6_Orientation" id="I6_OrientationR" name="I6_Orientation" value="R" checked>
+            <label for="I6_OrientationR">Orientation Right</label>
+
+        </form>
+    <button id ="save" onclick="saveButton()" >Save Results</button>
+    </body>
+</html>

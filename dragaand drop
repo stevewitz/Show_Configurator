@@ -1,0 +1,47 @@
+ <script>
+                let dropzoneId ="Welcome";
+                document.addEventListener('dragenter', (e) => {
+                    if (e.target.id != dropzoneId) {
+                        e.preventDefault();
+                        e.dataTransfer.effectAllowed = "none";
+                        e.dataTransfer.dropEffect = "none";
+                    }
+                }, false);
+
+               document.addEventListener('drop', (e) => {
+
+                   if (e.target.id != dropzoneId) {
+                       e.preventDefault();
+                       e.dataTransfer.effectAllowed = "none";
+                       e.dataTransfer.dropEffect = "none";
+                   }
+                   e.preventDefault();
+                   // e.stopPropagation();
+
+                    for (const f of e.dataTransfer.files) {
+                        console.log('File(s) you dragged here: ', f.path)
+                    }
+                   return false;
+                },false);
+                document.getElementById("Welcome").addEventListener('dragover', (e) => {
+                    if (e.target.id != dropzoneId) {
+
+                        e.dataTransfer.effectAllowed = "none";
+                        e.dataTransfer.dropEffect = "none";
+                    }
+                    e.preventDefault();
+                  //  e.stopPropagation();
+                    return false;
+                },false);
+
+                document.addEventListener('dragover', (e) => {
+                    if (e.target.id != dropzoneId) {
+                        e.preventDefault();
+                        e.dataTransfer.effectAllowed = "none";
+                        e.dataTransfer.dropEffect = "none";
+                    }
+
+                    //  e.stopPropagation();
+                    return false;
+                },false);
+            </script>

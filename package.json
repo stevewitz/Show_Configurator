@@ -1,0 +1,14 @@
+{
+  "name": "electrontest",
+  "version": "1.0.0",
+  "description": "first program",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "witzel",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^3.5.1"
+  }
+}
