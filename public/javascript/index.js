@@ -64,7 +64,7 @@ function saveButton() {
         }
     }
     wiz["Nothing"] = "SHOW  SETTINGS";
-
+    wiz["Version"] = Date.now();
     let result1 = document.getElementById("services").elements;
 
     for (i=0 ; i<result1.length; i++) { //get all service inputs
