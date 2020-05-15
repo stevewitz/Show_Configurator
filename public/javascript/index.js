@@ -50,7 +50,6 @@ function saveButton() {
             console.log(result[i].name +":" + result[i].value);
             wiz[result[i].name] = result[i].value;
         }
-
     }
     wiz["Nothing"] = "SHOW  SETTINGS";
     let wizJsonString =  JSON.stringify(wiz );
