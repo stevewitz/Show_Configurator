@@ -3,11 +3,14 @@ var wiz = {};
 var welcomePath;
 var dropzoneId ="Welcome";
 const fs = require('fs');
+
+
 document.addEventListener('dragenter', (e) => {
-    if (e.target.id != dropzoneId) {
+    if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
         e.preventDefault();
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
+
     }
 }, false);
 //
@@ -17,36 +20,29 @@ document.addEventListener('dragenter', (e) => {
 
 document.addEventListener('drop', (e) => {
 
-    if (e.target.id != dropzoneId) {
+    if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
     }
     e.preventDefault();
-
     for (const f of e.dataTransfer.files) {
         var stat = fs.lstatSync(f.path);
         var xxx = stat.isDirectory();
+        if(stat.isDirectory() && (e.target.id).substring(0,4) =="show"){
+            dropShowFiles(e.target.id);
+        }
 
-        if (stat.isFile()) {
-            var allowedExtensions = /(\.jpg)$/i;
-            if(!allowedExtensions.exec(f.path)) {
-                alert('Please upload Welcome Image jpg file only');
-            }
-            else{
-                let img = document.createElement("img");
-                img.src = f.path;
-                welcomePath = f.path;
-                document.getElementById("Welcome").innerHTML = "Welcome Screen";
-                document.getElementById("Welcome").appendChild(img);
-            }
+        else if (stat.isFile() && e.target.id == dropzoneId) { // make sure it's the correct dropzone for Welcome Image
+          dropWelcome(f.path);
         }
     }
     return false;
 },false);
 document.addEventListener('dragover', (e) => {
-    if (e.target.id != dropzoneId) {
+    if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
+
     }
     e.preventDefault();
     //  e.stopPropagation();
@@ -57,6 +53,25 @@ document.addEventListener('dragover', (e) => {
 // end of Welcome image drop
 //
 //
+
+function dropWelcome(place){
+    var allowedExtensions = /(\.jpg)$/i;
+    if(!allowedExtensions.exec(place)) {
+        alert('Please upload Welcome Image jpg file only');
+    }
+    else{
+        let img = document.createElement("img");
+        img.src = place;
+        welcomePath = place;
+        document.getElementById("Welcome").innerHTML = "Welcome Screen";
+        document.getElementById("Welcome").appendChild(img);
+    }
+}
+
+function dropShowFiles(divid){
+    console.log("folder dropped into: "+ divid);
+
+}
 
 function saveButton() {
     console.log("save buton pressed");

@@ -9,6 +9,7 @@
   "author": "witzel",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.5.1"
+    "jquery": "^3.5.1",
+    "fs-extra": "^9.0.0"
   }
 }
