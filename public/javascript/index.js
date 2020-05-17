@@ -2,7 +2,7 @@ var count =1;
 var wiz = {};
 var welcomePath;
 var dropzoneId ="Welcome";
-
+const fs = require('fs');
 document.addEventListener('dragenter', (e) => {
     if (e.target.id != dropzoneId) {
         e.preventDefault();
@@ -24,12 +24,22 @@ document.addEventListener('drop', (e) => {
     e.preventDefault();
 
     for (const f of e.dataTransfer.files) {
-        console.log('File(s) you dragged here: ', f.path);
-        let img = document.createElement("img");
-        img.src = f.path;
-        welcomePath= f.path;
-        document.getElementById("Welcome").innerHTML="Welcome Screen";
-        document.getElementById("Welcome").appendChild(img);
+        var stat = fs.lstatSync(f.path);
+        var xxx = stat.isDirectory();
+
+        if (stat.isFile()) {
+            var allowedExtensions = /(\.jpg)$/i;
+            if(!allowedExtensions.exec(f.path)) {
+                alert('Please upload Welcome Image jpg file only');
+            }
+            else{
+                let img = document.createElement("img");
+                img.src = f.path;
+                welcomePath = f.path;
+                document.getElementById("Welcome").innerHTML = "Welcome Screen";
+                document.getElementById("Welcome").appendChild(img);
+            }
+        }
     }
     return false;
 },false);
@@ -55,27 +65,22 @@ function saveButton() {
 
     for (i=0 ; i<result.length; i++){ //get all text box inputs
         if(result[i].type =="text") {
-            console.log(result[i].name + ":" + result[i].value);
             wiz[result[i].name] = result[i].value;
         }
         else if(result[i].type =="radio" && result[i].checked == true){ //get all radio button inputs
-            console.log(result[i].name +":" + result[i].value);
             wiz[result[i].name] = result[i].value;
         }
     }
-    wiz["Nothing"] = "SHOW  SETTINGS";
-    wiz["Version"] = Date.now();
+    wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wizdat file
+    wiz["Version"] = Date.now(); // adds version information time is MS since beginning of time....
     let result1 = document.getElementById("services").elements;
 
     for (i=0 ; i<result1.length; i++) { //get all service inputs
         wiz["service"] = wiz["service"] || []; // initialize wiz.service
         if (result1[i].type == "text") {
-            console.log(result1[i].name + ":" + result1[i].value);
             wiz["service"].push(result1[i].value);
         }
     }
-
-
     let wizJsonString =  JSON.stringify(wiz );
     console.log(wizJsonString);
 }
