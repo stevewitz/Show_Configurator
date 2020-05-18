@@ -3,7 +3,7 @@ var wiz = {};
 var welcomePath;
 var dropzoneId ="Welcome";
 const fs = require('fs');
-
+const fse= require('fs-extra');
 
 document.addEventListener('dragenter', (e) => {
     if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
@@ -29,7 +29,7 @@ document.addEventListener('drop', (e) => {
         var stat = fs.lstatSync(f.path);
         var xxx = stat.isDirectory();
         if(stat.isDirectory() && (e.target.id).substring(0,4) =="show"){
-            dropShowFiles(e.target.id);
+            dropShowFiles(e.target.id, f.path);
         }
 
         else if (stat.isFile() && e.target.id == dropzoneId) { // make sure it's the correct dropzone for Welcome Image
@@ -68,8 +68,20 @@ function dropWelcome(place){
     }
 }
 
-function dropShowFiles(divid){
-    console.log("folder dropped into: "+ divid);
+function dropShowFiles(divid, fromFolder){
+    console.log("folder dropped into: "+ divid + " and sent from: " + fromFolder);
+    let newdir = 'c:/Users/Steve.WIZ/Desktop/testFiles';
+    fse.copy(fromFolder, newdir, function (err) {
+       if (err) {
+            console.log("eoore: " + err)
+        } else {
+            console.log("success!");
+        }
+    });
+  //  fs.readdir(newdir, (err, files) => {
+ //       console.log("There are this many files: "+files.length);
+ //   });
+
 
 }
 
