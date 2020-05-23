@@ -1,3 +1,7 @@
+#mainDiv{
+    visibility: hidden;
+}
+
 #Welcome{
     height: 130px;
     background-color: powderblue;
@@ -14,4 +18,13 @@
     margin-left: auto;
     margin-right: auto;
 }
-
+#flexShow{
+    height:300px;
+    display: flex;
+    justify-content: space-between;
+}
+.showFlex1{
+    height: 100px;
+    width:100px;
+    border:20px;
+}
