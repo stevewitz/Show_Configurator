@@ -137,8 +137,8 @@ function saveConfigButton(){
 
     Swal.fire({
         title: 'Are you sure?',
-        text: "New default settings will be saved",
-        icon: 'warning',
+        text: "New default settings will replace existing settings",
+        type: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
@@ -179,7 +179,7 @@ function saveConfigButton(){
             });
             Swal.fire(
                 'Replaced!',
-                'Your default values have been saved.',
+                'Your defaults have now been replaced.',
                 'success'
             )
         }
@@ -232,7 +232,26 @@ function appendLeadingZeroes(n){
   console.log("Existing show goes here");
 }
 
-function addService() {
+async function addService() {
+
+    const { value: serviceName } = await Swal.fire({
+        title: 'Enter service',
+        input: 'text',
+        type:'question',
+        inputPlaceholder: 'Enter Service Name'
+    });
+
+    if (serviceName) {
+        Swal.fire(`Entered Service: ` + serviceName)
+
+
+
+    }
+
+
+
+
+
     var br = document.createElement("br");
     var newService = document.createElement("Input");
     newService.setAttribute('name', "Service"+ count);

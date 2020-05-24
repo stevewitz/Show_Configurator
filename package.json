@@ -9,7 +9,7 @@
   "author": "witzel",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.5.1",
+    "electron": "^9.0.0",
     "fs-extra": "8.0.1"
   }
 }
