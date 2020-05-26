@@ -1,4 +1,4 @@
-var count =1;
+var count =0;
 var wiz = {};
 var welcomePath;
 var dropzoneId ="Welcome";
@@ -114,9 +114,7 @@ function saveButton() {
         }
     }
     wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wizdat file
-    let current_datetime = new Date();
-    let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
-    wiz["Version"] =formatted_date; // adds version information time is MS since beginning of time....
+
   //  let result1 = document.getElementById("services").elements;
 
   //  for (i=0 ; i<result1.length; i++) { //get all service inputs
@@ -204,6 +202,12 @@ function appendLeadingZeroes(n){
     document.getElementById("startup").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
     document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //displat to user the save show location
+    // get info for Version
+     let current_datetime = new Date();
+     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
+     document.getElementById("Version").value = formatted_date;
+
+
 
     //check to see if directory exists
      try {
@@ -237,36 +241,36 @@ async function addService() {
     const { value: serviceName } = await Swal.fire({
         title: 'Enter service',
         input: 'text',
+        showCancelButton: true,
         type:'question',
         inputPlaceholder: 'Enter Service Name'
     });
 
     if (serviceName) {
-        Swal.fire(`Entered Service: ` + serviceName)
-
-
-
+     //   Swal.fire(`Entered Service: ` + serviceName)
+        var br = document.createElement("br");
+        var newService = document.createElement("Input");
+        newService.setAttribute('name', "Service"+ count, );
+        newService.setAttribute('readonly',true);
+        newService.setAttribute('value',serviceName);
+        var newServiceLabel=document.createElement("Label");
+        newServiceLabel.innerText="Service" + count + " ";
+        count ++;
+        document.getElementById("wizdat").appendChild(newServiceLabel);
+        document.getElementById("wizdat").appendChild(newService);
+        document.getElementById("wizdat").appendChild(br);
     }
 
 
 
 
 
-    var br = document.createElement("br");
-    var newService = document.createElement("Input");
-    newService.setAttribute('name', "Service"+ count);
-    var newServiceLabel=document.createElement("Label");
-    newServiceLabel.innerText="Service" + count + " ";
-    count ++;
-    document.getElementById("wizdat").appendChild(newServiceLabel);
-    document.getElementById("wizdat").appendChild(newService);
-    document.getElementById("wizdat").appendChild(br);
 
 
 
-    addShowDiv("xshownumberone", "english", "ENGLISH");
-    addShowDiv("yshownumberone", "french", "French");
-    addShowDiv("zshownumberone", "spanish", "Spanish");
+ //   addShowDiv("xshownumberone", "english", "ENGLISH");
+ //   addShowDiv("yshownumberone", "french", "French");
+ //   addShowDiv("zshownumberone", "spanish", "Spanish");
 }
 
 function addShowDiv(divId, divName,divText ){
