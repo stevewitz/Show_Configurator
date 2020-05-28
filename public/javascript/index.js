@@ -6,9 +6,8 @@ var wizJsonString;
 const fs = require('fs');
 const fse= require('fs-extra');
 const os = require('os');
+const readline = require('readline');
 const saveLocation = os.homedir() + "/show";
-
-
 
 document.addEventListener('dragenter', (e) => {
     if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
@@ -113,7 +112,7 @@ function saveButton() {
             wiz[result[i].name] = result[i].value;
         }
     }
-    wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wizdat file
+    wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wiz.dat file
 
   //  let result1 = document.getElementById("services").elements;
 
@@ -123,11 +122,39 @@ function saveButton() {
  //           wiz["service"].push(result1[i].value);
  //       }
  //   }
+    showName = '/' + document.getElementById('ShowName').value;
     wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
     wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
-    fs.writeFile(saveLocation + "/master_wiz.dat", wizJsonString, (err) => {
-        if (err) throw err;
-    });
+    if (fs.existsSync(saveLocation + showName)) { // show directory is already there
+       Swal.fire({
+           title: 'Show Already Exists',
+           text: 'Please change shown name',
+           type: 'warning',
+           showCancelButton: false,
+           confirmButtonColor: '#3085d6',
+           cancelButtonColor: '#d33',
+           confirmButtonText: 'OK!'
+       })
+        return;  //get out now
+    }
+    else{
+        //create directory
+        fs.mkdir(saveLocation + showName, function(err){
+            if(err){
+                console.log('failed to create directory');
+                return console.error(err);
+            }else{
+                console.log('Directory created successfully');
+            }
+            //  and write file
+            fs.writeFile(saveLocation + showName + "/wiz.dat", wizJsonString, (err) => {
+                if (err) throw err;
+            });
+        });
+
+    }
+
+
     console.log(wizJsonString);
 }
 
@@ -166,6 +193,7 @@ function saveConfigButton(){
                 }
                 wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
                 wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
+
                 fs.writeFile(saveLocation + "/master_wiz.dat", wizJsonString, (err) => {
                     if (err) {
                         consloe.log("error: " + err);
@@ -199,18 +227,18 @@ function appendLeadingZeroes(n){
     return n
 }
  function addNewShow(){
-    document.getElementById("startup").style.display = 'none';
+   // document.getElementById("startup").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
     document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //displat to user the save show location
     // get info for Version
      let current_datetime = new Date();
      let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
-     document.getElementById("Version").value = formatted_date;
+     readDatFile( saveLocation + "/master_wiz.dat"); // put default values in form
+     document.getElementById("Version").value = formatted_date;// now put in updated version number
 
-
-
+//The rest of this function does not belong here!!!!
     //check to see if directory exists
-     try {
+  /*   try {
          fs.statSync(saveLocation );
      } catch(e) {
          fs.mkdirSync(saveLocation);
@@ -228,6 +256,9 @@ function appendLeadingZeroes(n){
         })
     }
     // load existing template file
+
+  */
+
  }
 
  function editExistingShow(){
@@ -295,4 +326,55 @@ function addShowDiv(divId, divName,divText ){
 function imageClick(event){
     console.log(os.homedir());
     console.log("clicked: " + event.target.name)
+}
+
+function readDatFile(filename) { //read the wiz.dat file and populate teh screen parameters with it.
+    let parameter;
+    let value;
+
+    try {
+        // read contents of the file
+        const data = fs.readFileSync(filename, 'UTF-8');
+        // split the contents by new line
+        const lines = data.split(/\r?\n/);
+
+        lines.forEach((line) => {
+            if (line.indexOf(':') != -1) { // make sure there is a :
+
+                parameter=line.substr(0, line.indexOf(':'));
+                value= line.substr(line.indexOf(':') + 1).trim();
+                try{
+                    if(parameter=='StartUp'){
+                        if (value==1){
+                            document.getElementById("manualStartup").checked = true;
+                        }
+                        else{
+                            document.getElementById("autoStartup").checked = true;
+                        }
+                    }
+                    else if(parameter=='I6_Orientation'){ // for radio buttons
+
+                        if (value=='L'){
+                            document.getElementById("I6_OrientationL").checked = true;
+                        }
+                        else{
+                            document.getElementById("I6_OrientationR").checked = true;
+                        }
+                    }
+                    else{
+                        document.getElementById(parameter).value = value;
+                    }
+                }
+                catch {
+                    console.log("error reading wiz.dat")
+                }
+
+            } else {
+                console.log('Invalid line colon not found - ignoring:' + line);
+            }
+
+        });
+    } catch (err) {
+        console.error(err);
+    }
 }
