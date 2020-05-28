@@ -3,6 +3,7 @@ var wiz = {};
 var welcomePath;
 var dropzoneId ="Welcome";
 var wizJsonString;
+var service = [];
 const fs = require('fs');
 const fse= require('fs-extra');
 const os = require('os');
@@ -19,7 +20,7 @@ document.addEventListener('dragenter', (e) => {
 }, false);
 //
 //
-// this is for drop of welcome image
+// this is for drop of welcome image BELOW
 
 
 document.addEventListener('drop', (e) => {
@@ -54,13 +55,9 @@ document.addEventListener('dragover', (e) => {
 },false);
 
 //
-// end of Welcome image drop
+// end of Welcome image drop ABOVE
 //
 //
-
-
-
-
 
 function dropWelcome(place){
     var allowedExtensions = /(\.jpg)$/i;
@@ -98,7 +95,7 @@ function dropShowFiles(divid, fromFolder){
 
 
 }
-
+//******************** SAVE BUTTON  ***************************
 function saveButton() {
     console.log("save buton pressed");
     let result = document.getElementById("wizdat").elements;
@@ -128,8 +125,8 @@ function saveButton() {
     if (fs.existsSync(saveLocation + showName)) { // show directory is already there
        Swal.fire({
            title: 'Show Already Exists',
-           text: 'Please change shown name',
-           type: 'warning',
+           text: 'Please change show name',
+           type: 'error',
            showCancelButton: false,
            confirmButtonColor: '#3085d6',
            cancelButtonColor: '#d33',
@@ -138,24 +135,53 @@ function saveButton() {
         return;  //get out now
     }
     else{
-        //create directory
-        fs.mkdir(saveLocation + showName, function(err){
-            if(err){
-                console.log('failed to create directory');
-                return console.error(err);
-            }else{
-                console.log('Directory created successfully');
-            }
-            //  and write file
-            fs.writeFile(saveLocation + showName + "/wiz.dat", wizJsonString, (err) => {
-                if (err) throw err;
-            });
-        });
+        if(welcomePath) {
 
+            //create directory
+            fs.mkdir(saveLocation + showName, function (err) {
+                if (err) {
+                    console.log('failed to create directory');
+                    return console.error(err);
+                } else {
+                    console.log('Directory created successfully');
+                }
+                //  and write file
+                fs.writeFile(saveLocation + showName + "/wiz.dat", wizJsonString, (err) => {
+                    if (err) {
+                        console.log("error creating wiz.dat " + err)
+                    }
+                });
+            });
+        }
+
+        else{
+            Swal.fire({
+                title: 'Welcome Image',
+                text: 'Please add Welcome Image to show',
+                type: 'error',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK!'
+        })
+            return;  //get out now
+        }
     }
 
+    fs.copyFile (welcomePath, saveLocation + showName + '/Welcome.jpg', err => { //copy welcome image to show directory
+        if (err){
+            console.error(err)
+        }
+      //  console.log('copied Welcome Image!')
+    })
 
-    console.log(wizJsonString);
+
+     for(i=0; i<service.length; i++){
+         console.log('Service ' + i + ' = '+ service[i]);
+         addShowDiv(service[i],service[i],service[i])
+
+     }
+      //  console.log(wizJsonString);
 }
 
 function saveConfigButton(){
@@ -200,8 +226,6 @@ function saveConfigButton(){
                     }
                 });
 
-
-
             });
             Swal.fire(
                 'Replaced!',
@@ -210,14 +234,6 @@ function saveConfigButton(){
             )
         }
     })
-
-
-
-
-
-
-
-
 }
 
 function appendLeadingZeroes(n){
@@ -226,7 +242,8 @@ function appendLeadingZeroes(n){
     }
     return n
 }
- function addNewShow(){
+
+function addNewShow(){
    // document.getElementById("startup").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
     document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //displat to user the save show location
@@ -259,7 +276,7 @@ function appendLeadingZeroes(n){
 
   */
 
- }
+}
 
  function editExistingShow(){
   // add code to fetch existing shows
@@ -287,17 +304,11 @@ async function addService() {
         var newServiceLabel=document.createElement("Label");
         newServiceLabel.innerText="Service" + count + " ";
         count ++;
+        service.push(serviceName);
         document.getElementById("wizdat").appendChild(newServiceLabel);
         document.getElementById("wizdat").appendChild(newService);
         document.getElementById("wizdat").appendChild(br);
     }
-
-
-
-
-
-
-
 
  //   addShowDiv("xshownumberone", "english", "ENGLISH");
  //   addShowDiv("yshownumberone", "french", "French");
