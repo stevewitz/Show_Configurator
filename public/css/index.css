@@ -21,10 +21,27 @@
 #flexShow{
     height:300px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
 }
 .showFlex1{
-    height: 100px;
-    width:100px;
-    border:20px;
+    height: 180px;
+    width:200px;
+
+}
+.showFlex {
+    height: 200px;
+    width:200px;
+    margin-left: 30px;
+    margin-right: 30px;
+
+}
+
+.divText{
+    position: relative;
+    bottom: 100px;
+    text-align: center;
+    font-size: larger;
+    color: white;
+
 }

@@ -7,7 +7,7 @@ var service = [];
 const fs = require('fs');
 const fse= require('fs-extra');
 const os = require('os');
-const readline = require('readline');
+//const readline = require('readline');
 const saveLocation = os.homedir() + "/show";
 
 document.addEventListener('dragenter', (e) => {
@@ -243,6 +243,7 @@ function appendLeadingZeroes(n){
     return n
 }
 
+//******************* add a new show *****************************
 function addNewShow(){
    // document.getElementById("startup").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
@@ -252,6 +253,12 @@ function addNewShow(){
      let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
      readDatFile( saveLocation + "/master_wiz.dat"); // put default values in form
      document.getElementById("Version").value = formatted_date;// now put in updated version number
+
+    //this is for testing only
+    addShowDiv('English','English','English');
+    addShowDiv('French','French','French');
+    addShowDiv('DScriptive','DScriptive','DScriptive');
+    addShowDiv('I6-English','I6-English','I6-English');
 
 //The rest of this function does not belong here!!!!
     //check to see if directory exists
@@ -315,23 +322,41 @@ async function addService() {
  //   addShowDiv("zshownumberone", "spanish", "Spanish");
 }
 
+//************************ Puts up a new dive for eaqch show folder ************************
 function addShowDiv(divId, divName,divText ){
-    let div = document.createElement('div')
-    div.class = "showFlex";
+    let div = document.createElement('div');
+
+    div.setAttribute('class', 'showFlex');
     div.id= divId;
     div.name= divName;
-    div.innerText = divText;
+   // div.innerHTML  <p>divText</p>;
+
+    //div.style.height="100px";
     document.getElementById("flexShow").appendChild(div);
+
+
+
     var img = document.createElement("img");
     img.class = "showFlex1";
     img.id= divText;
     img.src = "./public/Images/folder.png" ;
-    img.style.height="80px";
-    img.style.margin="25px";
+   // img.style.height="100%";
+  //  img.style.marginRight="25px";
+    img.setAttribute('class', 'showFlex1');
     img.name=divName;
     img.addEventListener("click", imageClick, false);
     var src = document.getElementById(divId);
-    src.appendChild(img);
+    src.appendChild(img)
+    let div1 = document.createElement('div');
+    div1.id= divId+ 'Text';
+    div1.setAttribute('class', 'divText');
+
+    div1.innerHTML = divText +  '<br/>' +  '0 Files';
+
+    //div.style.height="100px";
+    document.getElementById(divId).appendChild(div1);
+
+
 }
 
 function imageClick(event){
