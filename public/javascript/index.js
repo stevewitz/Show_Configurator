@@ -5,8 +5,9 @@ var dropzoneId ="Welcome";
 var wizJsonString;
 var service = [];
 const fs = require('fs');
-const fse= require('fs-extra');
+//const fse= require('fs-extra');
 const os = require('os');
+const copydir = require('copy-dir');
 //const readline = require('readline');
 const saveLocation = os.homedir() + "/show";
 
@@ -17,6 +18,7 @@ document.addEventListener('dragenter', (e) => {
         e.dataTransfer.dropEffect = "none";
 
     }
+
 }, false);
 //
 //
@@ -47,7 +49,6 @@ document.addEventListener('dragover', (e) => {
     if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
         e.dataTransfer.effectAllowed = "none";
         e.dataTransfer.dropEffect = "none";
-
     }
     e.preventDefault();
     //  e.stopPropagation();
@@ -74,24 +75,33 @@ function dropWelcome(place){
 }
 
 function dropShowFiles(divid, fromFolder){
+
     console.log("folder dropped into: "+ divid + " and sent from: " + fromFolder);
-    let newdir = 'c:/Users/Steve.WIZ/Desktop/testFiles';
+ //  let newdir = (saveLocation + showName + '/' + divid.substring(4, divid.length - 4).replace(/^.*(\\|\/|\:)/, ''));
+    let newdir =  divid;
     fs.readdir(fromFolder, (err, files) => {
         console.log("There are this many files to copy: "+files.length);
     });
-    fse.copy(fromFolder, newdir, function (err) {
-       if (err) {
-            console.log("eoore: " + err)
-        } else {
-            console.log("success!");
-           fs.readdir(newdir, (err, files) => {
-                      console.log("There are this many files that were coppied: "+files.length);
-                  });
-        }
+
+   //opydir.sync(fromFolder, newdir, {
+
+   copydir.sync(fromFolder, newdir, {
+        utimes: true,  // keep add time and modify time
+        mode: true,    // keep file mode
+        cover: true    // cover file when exists, default is true
     });
-  //  fs.readdir(newdir, (err, files) => {
- //       console.log("There are this many files: "+files.length);
- //   });
+
+/*    fse.copy(fromFolder, newdir, function (err) {
+
+        //   fs.readdir(newdir, (err, files) => {
+        //       console.log("There are this many files that were copied: "+files.length);
+        //   });
+       }
+    });
+ */
+    fs.readdir(newdir, (err, files) => {
+       console.log("There are this many files: "+files.length);
+    });
 
 
 }
@@ -173,17 +183,23 @@ function saveButton() {
             console.error(err)
         }
       //  console.log('copied Welcome Image!')
-    })
-
+    });
 
      for(i=0; i<service.length; i++){
          console.log('Service ' + i + ' = '+ service[i]);
-         addShowDiv(service[i],service[i],service[i])
-
+         addShowDiv(service[i]);
+         fs.mkdir(saveLocation + showName + '/' + service[i], function (err) { // add proper directory
+             if (err) {
+                 console.log('failed to create directory');
+                 return console.error(err);
+             } else {
+                 console.log('Directory created successfully');
+             }
+         });
      }
-      //  console.log(wizJsonString);
 }
 
+//**********************  Save DEFAULT Configuration  *************************
 function saveConfigButton(){
 
     Swal.fire({
@@ -253,12 +269,13 @@ function addNewShow(){
      let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
      readDatFile( saveLocation + "/master_wiz.dat"); // put default values in form
      document.getElementById("Version").value = formatted_date;// now put in updated version number
-
+   // dropShowFiles('C:/show/test', 'C:/show/Aladdin/Dscriptive');
+    dropShowFiles('C:\\Users\\Steve.WIZ\\show\\steve\\English', 'C:\\Users\\Steve.WIZ\\Desktop\\Show\\Aladdin\\ICaption');
     //this is for testing only
-    addShowDiv('English','English','English');
-    addShowDiv('French','French','French');
-    addShowDiv('DScriptive','DScriptive','DScriptive');
-    addShowDiv('I6-English','I6-English','I6-English');
+//    addShowDiv('English','English','English');
+//    addShowDiv('French','French','French');
+//   addShowDiv('DScriptive','DScriptive','DScriptive');
+ //   addShowDiv('I6-English','I6-English','I6-English');
 
 //The rest of this function does not belong here!!!!
     //check to see if directory exists
@@ -323,12 +340,12 @@ async function addService() {
 }
 
 //************************ Puts up a new dive for eaqch show folder ************************
-function addShowDiv(divId, divName,divText ){
+function addShowDiv(divId ){
     let div = document.createElement('div');
 
     div.setAttribute('class', 'showFlex');
     div.id= divId;
-    div.name= divName;
+    div.name= divId;
    // div.innerHTML  <p>divText</p>;
 
     //div.style.height="100px";
@@ -338,20 +355,20 @@ function addShowDiv(divId, divName,divText ){
 
     var img = document.createElement("img");
     img.class = "showFlex1";
-    img.id= divText;
+    img.id= 'show'+ divId;
     img.src = "./public/Images/folder.png" ;
    // img.style.height="100%";
   //  img.style.marginRight="25px";
     img.setAttribute('class', 'showFlex1');
-    img.name=divName;
+    img.name=divId;
     img.addEventListener("click", imageClick, false);
     var src = document.getElementById(divId);
     src.appendChild(img)
     let div1 = document.createElement('div');
-    div1.id= divId+ 'Text';
+    div1.id= 'show' + divId+ 'Text';
     div1.setAttribute('class', 'divText');
 
-    div1.innerHTML = divText +  '<br/>' +  '0 Files';
+    div1.innerHTML = divId +  '<br/>' +  '0 Files';
 
     //div.style.height="100px";
     document.getElementById(divId).appendChild(div1);
