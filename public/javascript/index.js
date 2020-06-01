@@ -9,7 +9,7 @@ const fs = require('fs');
 const os = require('os');
 const copydir = require('copy-dir');
 //const readline = require('readline');
-const saveLocation = os.homedir() + "/show";
+const saveLocation = os.homedir() + "\\show";
 
 document.addEventListener('dragenter', (e) => {
     if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
@@ -75,36 +75,41 @@ function dropWelcome(place){
 }
 
 function dropShowFiles(divid, fromFolder){
-
+    let divUpdate = document.getElementById(divid);
+    let correctedCount = 0;
+    divUpdate.innerText = "testing";
     console.log("folder dropped into: "+ divid + " and sent from: " + fromFolder);
  //  let newdir = (saveLocation + showName + '/' + divid.substring(4, divid.length - 4).replace(/^.*(\\|\/|\:)/, ''));
-    let newdir =  divid;
+    let newdir = 'C:\\Users\\Steve.WIZ\\show\\steve\\English' //divid;
     fs.readdir(fromFolder, (err, files) => {
         console.log("There are this many files to copy: "+files.length);
+      for (i =0; i< files.length; i++) {
+
+          var stat = fs.lstatSync(fromFolder + "\\" + files[i]);
+          var xxx = stat.isDirectory();
+          if(fs.lstatSync(fromFolder + "\\" + files[i]).isFile()){
+
+              console.log("copied file: " + files[i] );
+              divUpdate.innerText =  i ;
+
+              fs.copyFileSync(fromFolder + "\\" + files[i], newdir + "\\" + files[i], (error) => {      // <3>
+                  if (error) {
+                      console.log("error: " + error );
+                  }
+                  console.log("ok");
+              });
+          }
+          else{
+              correctedCount +=1;
+          }
+      }
+      fs.readdir(newdir, (err, files) => {
+          console.log("This many files have been copied: " + (files.length - correctedCount) + ' Skipped ' + correctedCount + ' directorie(s)');
+      });
+
     });
-
-   //opydir.sync(fromFolder, newdir, {
-
-   copydir.sync(fromFolder, newdir, {
-        utimes: true,  // keep add time and modify time
-        mode: true,    // keep file mode
-        cover: true    // cover file when exists, default is true
-    });
-
-/*    fse.copy(fromFolder, newdir, function (err) {
-
-        //   fs.readdir(newdir, (err, files) => {
-        //       console.log("There are this many files that were copied: "+files.length);
-        //   });
-       }
-    });
- */
-    fs.readdir(newdir, (err, files) => {
-       console.log("There are this many files: "+files.length);
-    });
-
-
 }
+
 //******************** SAVE BUTTON  ***************************
 function saveButton() {
     console.log("save buton pressed");
@@ -129,7 +134,7 @@ function saveButton() {
  //           wiz["service"].push(result1[i].value);
  //       }
  //   }
-    showName = '/' + document.getElementById('ShowName').value;
+    showName = '\\' + document.getElementById('ShowName').value;
     wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
     wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
     if (fs.existsSync(saveLocation + showName)) { // show directory is already there
@@ -156,7 +161,7 @@ function saveButton() {
                     console.log('Directory created successfully');
                 }
                 //  and write file
-                fs.writeFile(saveLocation + showName + "/wiz.dat", wizJsonString, (err) => {
+                fs.writeFile(saveLocation + showName + "\\wiz.dat", wizJsonString, (err) => {
                     if (err) {
                         console.log("error creating wiz.dat " + err)
                     }
@@ -227,7 +232,7 @@ function saveConfigButton(){
             wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wizdat file
             wiz["ShowName"] =""; //no show name is default settings -- also no version number in default
 
-            fs.unlink(saveLocation + "/master_wiz.dat", (err) => {
+            fs.unlink(saveLocation + "\\master_wiz.dat", (err) => {
                 if (err) {
                     console.log("failed to delete file: "+err);
                 } else {
@@ -236,7 +241,7 @@ function saveConfigButton(){
                 wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
                 wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
 
-                fs.writeFile(saveLocation + "/master_wiz.dat", wizJsonString, (err) => {
+                fs.writeFile(saveLocation + "\\master_wiz.dat", wizJsonString, (err) => {
                     if (err) {
                         consloe.log("error: " + err);
                     }
@@ -266,16 +271,15 @@ function addNewShow(){
     document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //displat to user the save show location
     // get info for Version
      let current_datetime = new Date();
-     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
-     readDatFile( saveLocation + "/master_wiz.dat"); // put default values in form
+     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate())+appendLeadingZeroes(current_datetime.getHours()) +appendLeadingZeroes(current_datetime.getMinutes());
      document.getElementById("Version").value = formatted_date;// now put in updated version number
    // dropShowFiles('C:/show/test', 'C:/show/Aladdin/Dscriptive');
-    dropShowFiles('C:\\Users\\Steve.WIZ\\show\\steve\\English', 'C:\\Users\\Steve.WIZ\\Desktop\\Show\\Aladdin\\ICaption');
+  //  dropShowFiles('C:\\Users\\Steve.WIZ\\show\\steve\\English', 'C:\\Users\\Steve.WIZ\\Desktop\\Show\\Aladdin\\DScriptive');
     //this is for testing only
-//    addShowDiv('English','English','English');
-//    addShowDiv('French','French','French');
-//   addShowDiv('DScriptive','DScriptive','DScriptive');
- //   addShowDiv('I6-English','I6-English','I6-English');
+   addShowDiv('English','English','English');
+   addShowDiv('French','French','French');
+  addShowDiv('DScriptive','DScriptive','DScriptive');
+    addShowDiv('I6-English','I6-English','I6-English');
 
 //The rest of this function does not belong here!!!!
     //check to see if directory exists
