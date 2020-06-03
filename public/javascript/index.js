@@ -58,11 +58,21 @@ document.addEventListener('dragover', (e) => {
 // end of Welcome image drop ABOVE
 //
 //
-
+//********************* Drop Welcome Image Here  ******************************
 function dropWelcome(place){
     var allowedExtensions = /(\.jpg)$/i;
     if(!allowedExtensions.exec(place)) {
-        alert('Please upload Welcome Image jpg file only');
+       // alert('Please upload Welcome Image jpg file only');
+        Swal.fire({
+            title: 'Wrong File Type',
+            text: 'Please upload Welcome Image jpg file only',
+            type: 'error',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK!'
+        });
+        return;  //get out now
     }
     else{
         let img = document.createElement("img");
@@ -70,16 +80,16 @@ function dropWelcome(place){
         welcomePath = place;
         document.getElementById("Welcome").innerHTML = "Welcome Screen";
         document.getElementById("Welcome").appendChild(img);
+        document.getElementById("Welcome").style.backgroundColor = 'white';
     }
 }
 
+//********************* Drop Show Folders Here  ******************************
 function dropShowFiles(divid, fromFolder){
   // let showName = '\\phantom2'; // REMOVE ThIS LINE +++++++++++++++++++++++++++++++++%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if((divid.substring((divid.length - 4)) !== 'Text')){   // make sure we are updating data to Text suffix div only
         divid = divid+ 'Text'
     }
-
-
 
     let divUpdate = document.getElementById(divid); // get the element before changing the divid to get the rood description
     let correctedCount = 0;
@@ -211,6 +221,10 @@ function saveButton() {
              }
          });
      }
+    document.getElementById("wizdat").style.display = 'none';
+    document.getElementById("buttons").style.display = 'none';
+    document.getElementById("flexShow").style.display = 'flex';
+    document.getElementById("flexShowText").style.display = 'block';
 }
 
 //**********************  Save DEFAULT Configuration  *************************
@@ -273,11 +287,14 @@ function appendLeadingZeroes(n){
     return n
 }
 
-//******************* add a new show *****************************
+//******************* add a new show button clicked *****************************
 function addNewShow(){
-   // document.getElementById("startup").style.display = 'none';
+    document.getElementById("startup").style.display = 'none';
+    document.getElementById("flexShow").style.display = 'none';
+    document.getElementById("flexShowText").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
-    document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //displat to user the save show location
+
+    document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //display to user the save show location
     // get info for Version
      let current_datetime = new Date();
      let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
@@ -327,7 +344,7 @@ async function addService() {
 
 }
 
-//************************ Puts up a new dive for eaqch show folder ************************
+//************************ Puts up a new div for each show folder ************************
 function addShowDiv(divId ){
     let div = document.createElement('div');
 
@@ -363,7 +380,7 @@ function addShowDiv(divId ){
 
 
 }
-//*************************  clicked image to bring up opendialog  ******************************************
+//*************************  clicked file icon image to bring up opendialog  ******************************************
 function imageClick(event){ //user has clicked on one of the show folders
     console.log(os.homedir());
     console.log("clicked: " + event.target.name);
@@ -380,11 +397,26 @@ function imageClick(event){ //user has clicked on one of the show folders
     }).catch(err => {
         console.log(err)
     })
-
-
-
 }
 
+//*************************  clicked WELCOME image to bring up opendialog  ******************************************
+function welcomeClick(){
+    console.log('clicked Welcome Image' );
+    const remote = require("electron").remote;
+    const dialog = remote.dialog;
+    dialog.showOpenDialog(remote.getCurrentWindow(), {
+        filters:[{ name: 'JPG Files', extensions: ['jpg'] }],
+        properties: ["openFile" ]
+    }).then(result => {
+        if (result.canceled === false) {
+            console.log("Selected file paths:");
+            console.log(result.filePaths[0]);
+            dropWelcome(result.filePaths[0]);
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+}
 
 function readDatFile(filename) { //read the wiz.dat file and populate teh screen parameters with it.
     let parameter;

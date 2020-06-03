@@ -4,11 +4,15 @@
 
 #Welcome{
     height: 130px;
-    background-color: powderblue;
+    width:300px;
+    background-color: #9e9e9e1f;;
     border-radius: 3px;
     text-align: center;
     font-weight: bold;
     font-font: calabri;
+    margin-right: auto;
+    margin-left:auto;
+;
 }
 
 #Welcome img{
@@ -18,11 +22,30 @@
     margin-left: auto;
     margin-right: auto;
 }
+#saveFileLocation{
+    font-weight: bold;
+    margin-right:auto;
+    margin-left:auto;
+    text-align: center;
+    margin-top:15px;
+    margin-bottom:25px;
+}
+#folders{
+    background-color: #9e9e9e1f;
+}
 #flexShow{
     height:300px;
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+}
+
+#flexShowText{
+    font-size: large;
+    margin-right:auto;
+    margin-left:auto;
+    text-align: center;
+    margin-top: 30px;
 }
 .showFlex1{
     height: 180px;

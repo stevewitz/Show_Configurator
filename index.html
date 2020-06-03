@@ -22,14 +22,19 @@
 
         <div id="mainDiv">
 
-            <div id="Welcome">Please Drag Welcome Screen Here</div>
-    <div id="saveFileLocation">
-        This is where the save file location goes
-    </div>
+            <div id="Welcome" onclick="welcomeClick()">Please Drag Welcome Screen Here <br> Or Click To Select </div>
 
-            <div id="flexShow">
-
+            <div id="saveFileLocation">
+                This is where the save file location goes
             </div>
+
+            <div id = folders>
+                <div id ="flexShowText">Please Drag Folders To Corresponding Service Folders <br> Or Click To Service Folder To Choose </div>
+                <div id="flexShow">
+
+                </div>
+            </div>
+
 
             <form id="wizdat">
 
@@ -37,9 +42,9 @@
 
                 <p>   Please Select Startup State:</p>
                 <input type="radio" class="startup" id="manualStartup" name="StartUp" value="1">
-                <label for="manualStartup">Start up: Menu</label>
+                <label for="manualStartup">Start up: Menu (User Selects Service)</label>
                 <input type="radio" class="startup" id="autoStartup" name="StartUp" value="0">
-                <label for="autoStartup">Start up: Automatic (with no user selection)</label><br>
+                <label for="autoStartup">Start up: Automatically starts Service0</label><br>
 
                 <p>Zigbee Settings</p>
                 <label for="PanID">PanID:</label> <input type="text" id="PanID" name="PanID" value="301"><br>
@@ -71,12 +76,11 @@
                 <p>System Services</p>
                <!-- <label for="service">Service0</label> <input type="text"   name="Service0"><br> -->
             </form>
-
-            <button id ="addService" onclick="addService()" >Add Service</button>
-            <button id ="save" onclick="saveButton()" >Save Results</button>
-            <button id ="saveConfig" onclick="saveConfigButton()" >Save As New Defaults</button>
-            <div id="showthis">" this is the shows this-div</div>
-                <div id="showthat">" this is the shows that-div</div>
+            <div id="buttons">
+                <button id ="addService" onclick="addService()" >Add Service</button>
+                <button id ="save" onclick="saveButton()" >Save Results</button>
+                <button id ="saveConfig" onclick="saveConfigButton()" >Save As New Defaults</button>
+            </div>
         </div>
     </body>
 </html>
