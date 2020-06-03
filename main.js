@@ -1,12 +1,15 @@
+
+
 const {app, BrowserWindow} = require('electron')
-const url = require('url')
-const path = require('path')
+const url = require('url');
+const path = require('path');
+var os = require('os');
 
 let win
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 function createWindow() {
    // win = new BrowserWindow({width: 800, height: 1200})
-    win = new BrowserWindow({ width: 800, height: 1200, webPreferences: { nodeIntegration: true} });
+    win = new BrowserWindow({ width: 800, height: 1200, webPreferences: { nodeIntegration: true, enableRemoteModule:true} });
     win.loadURL(url.format ({
         pathname: path.join(__dirname, 'index.html'),
         protocol: 'file:',
@@ -15,3 +18,4 @@ function createWindow() {
 }
 app.commandLine.appendSwitch('remote-debugging-port', '9222')
 app.on('ready', createWindow)
+

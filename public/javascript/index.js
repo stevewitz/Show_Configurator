@@ -8,7 +8,6 @@ const fs = require('fs');
 //const fse= require('fs-extra');
 const os = require('os');
 const copydir = require('copy-dir');
-//const readline = require('readline');
 const saveLocation = os.homedir() + "\\show";
 
 document.addEventListener('dragenter', (e) => {
@@ -75,22 +74,32 @@ function dropWelcome(place){
 }
 
 function dropShowFiles(divid, fromFolder){
-    let divUpdate = document.getElementById(divid);
+  // let showName = '\\phantom2'; // REMOVE ThIS LINE +++++++++++++++++++++++++++++++++%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    if((divid.substring((divid.length - 4)) !== 'Text')){   // make sure we are updating data to Text suffix div only
+        divid = divid+ 'Text'
+    }
+
+
+
+    let divUpdate = document.getElementById(divid); // get the element before changing the divid to get the rood description
     let correctedCount = 0;
     divUpdate.innerText = "testing";
     console.log("folder dropped into: "+ divid + " and sent from: " + fromFolder);
- //  let newdir = (saveLocation + showName + '/' + divid.substring(4, divid.length - 4).replace(/^.*(\\|\/|\:)/, ''));
-    let newdir = 'C:\\Users\\Steve.WIZ\\show\\steve\\English' //divid;
+    if((divid.substring((divid.length - 4)) === 'Text')){   // if the id ends with Text, get rid of it.
+        divid = divid.substring(4, divid.length - 4); //get rid of show prefix too
+    }
+    else{
+        divid = divid.substring(4 ); //get rid of show prefix
+    }
+   let newdir = (saveLocation + showName + '\\' + divid) ;  //.replace(/^.*(\\|\/|\:)/, '')); // get the correct save location for the files
+   // let newdir = 'C:\\Users\\Steve.WIZ\\show\\steve\\English' //divid;
     fs.readdir(fromFolder, (err, files) => {
         console.log("There are this many files to copy: "+files.length);
       for (i =0; i< files.length; i++) {
-
-          var stat = fs.lstatSync(fromFolder + "\\" + files[i]);
-          var xxx = stat.isDirectory();
-          if(fs.lstatSync(fromFolder + "\\" + files[i]).isFile()){
+          if(fs.lstatSync(fromFolder + "\\" + files[i]).isFile() ){
 
               console.log("copied file: " + files[i] );
-              divUpdate.innerText =  i ;
+              divUpdate.innerText = divid + "\n" +  (i +1)+ ' Files'  ;
 
               fs.copyFileSync(fromFolder + "\\" + files[i], newdir + "\\" + files[i], (error) => {      // <3>
                   if (error) {
@@ -146,7 +155,7 @@ function saveButton() {
            confirmButtonColor: '#3085d6',
            cancelButtonColor: '#d33',
            confirmButtonText: 'OK!'
-       })
+       });
         return;  //get out now
     }
     else{
@@ -271,38 +280,16 @@ function addNewShow(){
     document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //displat to user the save show location
     // get info for Version
      let current_datetime = new Date();
-     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate())+appendLeadingZeroes(current_datetime.getHours()) +appendLeadingZeroes(current_datetime.getMinutes());
+     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
+     readDatFile( saveLocation + "/master_wiz.dat"); // put default values in form
      document.getElementById("Version").value = formatted_date;// now put in updated version number
-   // dropShowFiles('C:/show/test', 'C:/show/Aladdin/Dscriptive');
-  //  dropShowFiles('C:\\Users\\Steve.WIZ\\show\\steve\\English', 'C:\\Users\\Steve.WIZ\\Desktop\\Show\\Aladdin\\DScriptive');
-    //this is for testing only
-   addShowDiv('English','English','English');
-   addShowDiv('French','French','French');
-  addShowDiv('DScriptive','DScriptive','DScriptive');
-    addShowDiv('I6-English','I6-English','I6-English');
 
-//The rest of this function does not belong here!!!!
-    //check to see if directory exists
-  /*   try {
-         fs.statSync(saveLocation );
-     } catch(e) {
-         fs.mkdirSync(saveLocation);
-     }
-        //check if master_wiz.dat exists
-    try{
-        fs.statSync(saveLocation + "/master_wiz.dat");
-            console.log("file exists");
-     } catch(e){
-           console.log("file must be created");
-        fs.writeFile(saveLocation + "/master_wiz.dat", wizJsonString, (err) => {
+    //this is for testing only **********************************************
+          //    addShowDiv('English','English','English');
+          //    addShowDiv('French','French','French');
+          //    addShowDiv('DScriptive','DScriptive','DScriptive');
+         //     addShowDiv('I6-English','I6-English','I6-English');
 
-            // In case of a error throw err.
-            if (err) throw err;
-        })
-    }
-    // load existing template file
-
-  */
 
 }
 
@@ -338,9 +325,6 @@ async function addService() {
         document.getElementById("wizdat").appendChild(br);
     }
 
- //   addShowDiv("xshownumberone", "english", "ENGLISH");
- //   addShowDiv("yshownumberone", "french", "French");
- //   addShowDiv("zshownumberone", "spanish", "Spanish");
 }
 
 //************************ Puts up a new dive for eaqch show folder ************************
@@ -371,19 +355,36 @@ function addShowDiv(divId ){
     let div1 = document.createElement('div');
     div1.id= 'show' + divId+ 'Text';
     div1.setAttribute('class', 'divText');
-
+    div1.addEventListener("click", imageClick, false);
     div1.innerHTML = divId +  '<br/>' +  '0 Files';
-
+    div1.name=divId;
     //div.style.height="100px";
     document.getElementById(divId).appendChild(div1);
 
 
 }
-
-function imageClick(event){
+//*************************  clicked image to bring up opendialog  ******************************************
+function imageClick(event){ //user has clicked on one of the show folders
     console.log(os.homedir());
-    console.log("clicked: " + event.target.name)
+    console.log("clicked: " + event.target.name);
+    const remote = require("electron").remote;
+    const dialog = remote.dialog;
+    dialog.showOpenDialog(remote.getCurrentWindow(), {
+        properties: ["openDirectory" ]
+    }).then(result => {
+        if (result.canceled === false) {
+            console.log("Selected file paths:");
+            console.log(result.filePaths[0]);
+            dropShowFiles('show'+ event.target.name+'Text', result.filePaths[0]);
+        }
+    }).catch(err => {
+        console.log(err)
+    })
+
+
+
 }
+
 
 function readDatFile(filename) { //read the wiz.dat file and populate teh screen parameters with it.
     let parameter;
@@ -423,7 +424,7 @@ function readDatFile(filename) { //read the wiz.dat file and populate teh screen
                     }
                 }
                 catch {
-                    console.log("error reading wiz.dat")
+                   // console.log("error reading wiz.dat")
                 }
 
             } else {
