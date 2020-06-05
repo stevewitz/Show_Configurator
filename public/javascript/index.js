@@ -133,6 +133,23 @@ function dropShowFiles(divid, fromFolder){
 //******************** SAVE BUTTON  ***************************
 function saveButton() {
     console.log("save buton pressed");
+    if(service.length == 0){
+        console.log("no services entered")
+        Swal.fire({
+            title: 'No Services',
+            text: 'You must include at least 1 service',
+            type: 'error',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK!'
+        })
+        return;  //get out now
+
+    }
+
+
+
     let result = document.getElementById("wizdat").elements;
 
 
