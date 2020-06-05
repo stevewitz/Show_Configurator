@@ -1,8 +1,33 @@
+#topline{
+    height:15px;
+    background: linear-gradient( #c6c6c6c4,whitesmoke);
+    width:100%
+}
+
+#header{
+    background-color: whitesmoke;
+    width:100%
+}
+
+#bottomline{
+    height:15px;
+    background: linear-gradient(whitesmoke, #c6c6c6c4);
+    width:100%
+}
+#name{
+    font-size: 3.2em;
+    font-weight: bolder;
+    font-family: Helvetica, Arial,sans-serif;
+    background-color: whitesmoke;
+    text-align: center;
+    margin-bottom:10px;
+}
 
 #copyright{
     font-size: small;
     text-align: right;
     margin-right: 20px;
+    margin-bottom: 15px;
 }
 body{
     height: 90%;
@@ -10,7 +35,7 @@ body{
 
 #mainDiv {
     visibility: hidden;
-    color: #4f4f4f;
+
     font-family: Helvetica, Arial, sans-serif;
 
 }
@@ -23,10 +48,6 @@ fieldset{
     width:100%;
 }
 
-h2{
-    font-size: 3.2em;
-    font-family: Helvetica, Arial,sans-serif;
-}
 
 #Welcome{
     height: 130px;
@@ -55,9 +76,10 @@ button{
     margin:20px;
     color: #4f4f4f;
     border-radius: 3px;
-    border:outset;
-    border-width: 4px;
+
+    border-width: 2px;
     width: 130px;
+    height:50px;
     background-color: #d2d2d2;
     font-size: 16px;
     font-weight: bold;
@@ -69,6 +91,8 @@ button:hover{
 
 #wizdat{
    display:inline-block;
+    margin-left:20px;
+
 }
 
 #wizdat input[type=number]{
@@ -78,6 +102,10 @@ button:hover{
 #buttons{
     display: flex;
     justify-content: space-evenly;
+}
+
+#Welcome{
+    margin-top:15px;
 }
 
 #Welcome img{
@@ -129,11 +157,18 @@ button:hover{
     cursor: pointer;
 }
 
+#ShowNameDiv{
+    font-weight: bold;
+}
+
 .divText{
     position: relative;
     bottom: 100px;
     text-align: center;
     font-size: larger;
     color: white;
+}
 
+#i6ScreenSettingsDiv{
+    display: run-in;
 }

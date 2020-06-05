@@ -311,6 +311,7 @@ function addNewShow(){
     document.getElementById("flexShow").style.display = 'none';
     document.getElementById("flexShowText").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
+    document.getElementById("wizdat").style.display='inline-block';
 
     document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //display to user the save show location
     // get info for Version
