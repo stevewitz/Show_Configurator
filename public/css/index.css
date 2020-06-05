@@ -21,6 +21,7 @@
     background-color: whitesmoke;
     text-align: center;
     margin-bottom:10px;
+    color: #717171;
 }
 
 #copyright{
@@ -40,14 +41,21 @@ body{
 
 }
 
-fieldset{
-
-    border-radius: 3px;
-    justify-content:center;
-    flex-wrap: wrap;
-    width:100%;
+#mainScreenSettingsDiv{
+    display:inline-block;
 }
 
+
+fieldset{
+
+
+    width:100%;
+    color: #717171;
+}
+legend{
+    font-weight: bold;
+
+}
 
 #Welcome{
     height: 130px;
@@ -59,6 +67,14 @@ fieldset{
     font-font: calabri;
     margin-right: auto;
     margin-left:auto;
+    border:1px solid;
+    border-radius:3px;
+    border-color:lightgray;
+    color: #717171;
+
+}
+#saveFileLocation{
+    color: #717171;
 }
 
 #Welcome:hover{
@@ -74,9 +90,8 @@ fieldset{
 }
 button{
     margin:20px;
-    color: #4f4f4f;
     border-radius: 3px;
-
+    color: #717171;
     border-width: 2px;
     width: 130px;
     height:50px;
@@ -159,6 +174,8 @@ button:hover{
 
 #ShowNameDiv{
     font-weight: bold;
+    color: #717171;
+    margin-left: 18px;
 }
 
 .divText{
@@ -169,6 +186,19 @@ button:hover{
     color: white;
 }
 
-#i6ScreenSettingsDiv{
-    display: run-in;
+#Version{
+    background-color: lightgray;
+    width: 70px;
+}
+#mainScreenSettingsDiv{
+    line-height: 1.5;
+}
+#audioSettingsDiv{
+    margin-top:10px;
+}
+#rfSettingsDiv{
+    line-height: 1.5;
+}
+#i6ScreenSettingsDiv {
+    line-height: 1.5;
 }
