@@ -109,7 +109,7 @@ function dropShowFiles(divid, fromFolder){
           if(fs.lstatSync(fromFolder + "\\" + files[i]).isFile() ){
 
               console.log("copied file: " + files[i] );
-              divUpdate.innerText = divid + "\n" +  (i +1)+ ' Files'  ;
+              divUpdate.innerText = divid + "\n" +  (i)+ ' Files'  ;
 
               fs.copyFileSync(fromFolder + "\\" + files[i], newdir + "\\" + files[i], (error) => {      // <3>
                   if (error) {
@@ -124,6 +124,7 @@ function dropShowFiles(divid, fromFolder){
       }
       fs.readdir(newdir, (err, files) => {
           console.log("This many files have been copied: " + (files.length - correctedCount) + ' Skipped ' + correctedCount + ' directorie(s)');
+          divUpdate.innerText = divid + "\n" +  (i +1)+ ' Files Copied \n' + files.length + ' Total' ;
       });
 
     });
@@ -135,8 +136,8 @@ function saveButton() {
     let result = document.getElementById("wizdat").elements;
 
 
-    for (i=0 ; i<result.length; i++){ //get all text box inputs
-        if(result[i].type =="text") {
+    for (i=0 ; i<result.length; i++){ //get all text  and number box inputs
+        if((result[i].type =="text") ||(result[i].type == "number") ) {
             wiz[result[i].name] = result[i].value;
         }
         else if(result[i].type =="radio" && result[i].checked == true){ //get all radio button inputs
@@ -245,7 +246,7 @@ function saveConfigButton(){
 
 
             for (i=0 ; i<result.length; i++){ //get all text box inputs
-                if(result[i].type =="text") {
+                if((result[i].type =="text") ||(result[i].type == "number") ) {
                     wiz[result[i].name] = result[i].value;
                 }
                 else if(result[i].type =="radio" && result[i].checked == true){ //get all radio button inputs
@@ -337,9 +338,9 @@ async function addService() {
         newServiceLabel.innerText="Service" + count + " ";
         count ++;
         service.push(serviceName);
-        document.getElementById("wizdat").appendChild(newServiceLabel);
-        document.getElementById("wizdat").appendChild(newService);
-        document.getElementById("wizdat").appendChild(br);
+        document.getElementById("systemServidesDiv").appendChild(newServiceLabel);
+        document.getElementById("systemServidesDiv").appendChild(newService);
+        document.getElementById("systemServidesDiv").appendChild('&nbsp');
     }
 
 }

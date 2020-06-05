@@ -7,13 +7,12 @@
 <html>
     <head>
         <meta charset = "UTF-8">
-
-        <title>Show Configurator</title>
+        <title>   Wiz Show Configurator  </title>
     </head>
 
 
     <body>
-
+            <div id = 'copyright'>(C) 2020 Wiz Computing</div>
             <h2 align="center"> Show Configurator</h2>
         <div id="startup">
             <button id ="Add NEW Show" onclick="addNewShow()" >Add NEW Show</button>
@@ -37,48 +36,63 @@
 
 
             <form id="wizdat">
+                <div id="ShowNameDiv">
+                    <label for="ShowName">ShowName:</label> <input type="text" id="ShowName" name="ShowName"><br><br>
+                </div>
+                <fieldset id="StartupStateDiv">
+                      <legend> Startup State</legend>
+                    <input type="radio" class="startup" id="manualStartup" name="StartUp" value="1">
+                    <label for="manualStartup">Start up: Menu (User Selects Service)</label>
+                    <input type="radio" class="startup" id="autoStartup" name="StartUp" value="0">
+                    <label for="autoStartup">Start up: Automatically starts Service0</label><br>
+                </fieldset>
+                <br>
+                <fieldset id = "rfSettingsDiv">
+                    <legend>RF Settings</legend>
 
-                <label for="ShowName">ShowName:</label> <input type="text" id="ShowName" name="ShowName"><br>
+                <label for="PanID">Zigbee Settings PanID:</label> <input type="number" id="PanID" name="PanID" value="301"><br>
 
-                <p>   Please Select Startup State:</p>
-                <input type="radio" class="startup" id="manualStartup" name="StartUp" value="1">
-                <label for="manualStartup">Start up: Menu (User Selects Service)</label>
-                <input type="radio" class="startup" id="autoStartup" name="StartUp" value="0">
-                <label for="autoStartup">Start up: Automatically starts Service0</label><br>
+                    WIFI Settings
+                    <label for="SSID">SSID:</label> <input type="text" id="SSID" name="SSID">
+                    <label for="Pass">Passphrase:</label> <input type="text" id="Pass" name="Pass"><br>
+                </fieldset>
+                <br>
+                <fieldset id = "mainScreenSettingsDiv">
+                    <legend>Main Screen Settings</legend>
+                    <label for="FadeIn">Fade In Time:</label> <input type="number" id="FadeIn" name="FadeIn" min="0" max = "10">
+                    <label for="OnTime">On Time:</label> <input type="number" id="OnTime" name="OnTime" min="0" max = "100"><br>
+                    <label for="FadeOut">Fade Out Time:</label> <input type="number" id="FadeOut" name="FadeOut"min="0" max = "10" >
+                    <label for="Backlight">Backlight Level( 1-100):</label> <input type="number" id="Backlight" name="Backlight"min="0" max = "100" ><br>
+                </fieldset>
+                <br>
+                <fieldset id = "audioSettingsDiv">
+                    <legend>Audio Settings</legend>
+                    <label for="Volume">Audio Volume:</label> <input type="number" id="Volume" name="Volume"min="0" max = "100" ><br>
+                </fieldset>
+                <br>
+                <fieldset id = "i6ScreenSettingsDiv">
+                <legend>I6 Screen Settings</legend>
+                    <label for="I6_FadeIn">I6_Fade In Time:</label> <input type="number" id="I6_FadeIn" name="I6_FadeIn"min="0" max = "10" >
+                    <label for="I6_OnTime">I6_On Time:</label> <input type="number" id="I6_OnTime" name="I6_OnTime"min="0" max = "100" ><br>
+                    <label for="I6_FadeOut">I6_Fade Out Time:</label> <input type="number" id="I6_FadeOut" name="I6_FadeOut"min="0" max = "10" >
+                    <label for="I6_Backlight">I6_Backlight Level( 1-100):</label> <input type="number" id="I6_Backlight" name="I6_Backlight"min="0" max = "100" ><br>
 
-                <p>Zigbee Settings</p>
-                <label for="PanID">PanID:</label> <input type="text" id="PanID" name="PanID" value="301"><br>
-
-                <p>WIFI Settings</p>
-                <label for="SSID">SSID:</label> <input type="text" id="SSID" name="SSID">
-                <label for="Pass">Passphrase:</label> <input type="text" id="Pass" name="Pass"><br>
-
-                <p>Main Screen Settings</p>
-                <label for="FadeIn">Fade In Time:</label> <input type="text" id="FadeIn" name="FadeIn">
-                <label for="OnTime">On Time:</label> <input type="text" id="OnTime" name="OnTime"><br>
-                <label for="FadeOut">Fade Out Time:</label> <input type="text" id="FadeOut" name="FadeOut">
-                <label for="Backlight">Backlight Level( 1-100):</label> <input type="text" id="Backlight" name="Backlight"><br>
-
-                <p>Audio Settings</p>
-                <label for="Volume">Audio Volume:</label> <input type="text" id="Volume" name="Volume"><br>
-
-                <p>I6 Screen Settings</p>
-                <label for="I6_FadeIn">I6_Fade In Time:</label> <input type="text" id="I6_FadeIn" name="I6_FadeIn">
-                <label for="I6_OnTime">I6_On Time:</label> <input type="text" id="I6_OnTime" name="I6_OnTime"><br>
-                <label for="I6_FadeOut">I6_Fade Out Time:</label> <input type="text" id="I6_FadeOut" name="I6_FadeOut">
-                <label for="I6_Backlight">I6_Backlight Level( 1-100):</label> <input type="text" id="I6_Backlight" name="I6_Backlight"><br>
-                <p>   Please Select I6 Orientation:</p>
-                <input type="radio" class="I6_Orientation" id="I6_OrientationL" name="I6_Orientation" value="L">
-                <label for="I6_OrientationL">Orientation Left)</label>
-                <input type="radio" class="I6_Orientation" id="I6_OrientationR" name="I6_Orientation" value="R" >
-                <label for="I6_OrientationR">Orientation Right</label><br>
-                <label for="Version">Version:</label> <input type="text" id="Version" name="Version" readonly>
-                <p>System Services</p>
-               <!-- <label for="service">Service0</label> <input type="text"   name="Service0"><br> -->
+                    <input type="radio" class="I6_Orientation" id="I6_OrientationL" name="I6_Orientation" value="L">
+                    <label for="I6_OrientationL">Orientation Left</label>
+                    <input type="radio" class="I6_Orientation" id="I6_OrientationR" name="I6_Orientation" value="R" >
+                    <label for="I6_OrientationR">Orientation Right</label><br>
+                </fieldset>
+                <br>
+                    <label for="Version">Version:</label> <input type="text" id="Version" name="Version" readonly>
+                <br><br>
+                <fieldset id = "systemServidesDiv">
+                    <legend>System Services</legend>
+                </fieldset>
+                <br><br>
             </form>
             <div id="buttons">
                 <button id ="addService" onclick="addService()" >Add Service</button>
-                <button id ="save" onclick="saveButton()" >Save Results</button>
+                <button id ="save" onclick="saveButton()" >Save and Continue</button>
                 <button id ="saveConfig" onclick="saveConfigButton()" >Save As New Defaults</button>
             </div>
         </div>
