@@ -10,6 +10,7 @@ const os = require('os');
 const copydir = require('copy-dir');
 const saveLocation = os.homedir() + "\\show";
 
+
 document.addEventListener('dragenter', (e) => {
     if ((e.target.id != dropzoneId) && ((e.target.id).substring(0,4) !="show" )  ){
         e.preventDefault();
@@ -313,10 +314,10 @@ function addNewShow(){
     document.getElementById("mainDiv").style.visibility='visible';
     document.getElementById("wizdat").style.display='inline-block';
 
-    document.getElementById("saveFileLocation").innerHTML = "This show will be saved in this location: " + saveLocation; //display to user the save show location
+    document.getElementById("saveFileLocation").innerHTML = document.getElementById("saveFileLocation").innerHTML + "This show will be saved at: " + saveLocation; //display to user the save show location
     // get info for Version
      let current_datetime = new Date();
-     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate());
+     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate()) +appendLeadingZeroes(current_datetime.getHours())+appendLeadingZeroes(current_datetime.getMinutes());
      readDatFile( saveLocation + "/master_wiz.dat"); // put default values in form
      document.getElementById("Version").value = formatted_date;// now put in updated version number
 

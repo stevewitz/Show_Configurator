@@ -22,7 +22,8 @@
 
 
             <div id="name">
-                 Show Configurator
+                <img id="logo" src = "./public/Images/logo.png" >
+             <p id = projectName>  Show Configurator </p>
             </div>
 
             <div id = "bottomline">
@@ -40,7 +41,8 @@
             <div id="Welcome" onclick="welcomeClick()">Please Drag Welcome Screen Here <br> Or Click To Select </div>
 
             <div id="saveFileLocation">
-                This is where the save file location goes
+                <label for="Version">Version:</label> <input type="text" id="Version" name="Version" readonly>
+
             </div>
 
             <div id = folders>
@@ -53,7 +55,7 @@
 
             <form id="wizdat" style="display:none">
                 <div id="ShowNameDiv">
-                    <label for="ShowName">ShowName:</label> <input type="text" id="ShowName" name="ShowName"><br><br>
+                    <label for="ShowName">ShowName:</label> <input type="text" id="ShowName"  name="ShowName"><br><br>
                 </div>
                 <fieldset id="StartupStateDiv">
                       <legend> Startup State</legend>
@@ -99,8 +101,7 @@
                     <label for="I6_OrientationR">Orientation Right</label><br>
                 </fieldset>
                 <br>
-                    <label for="Version">Version:</label> <input type="text" id="Version" name="Version" readonly>
-                <br><br>
+
                 <fieldset id = "systemServidesDiv">
                     <legend>System Services</legend>
                 </fieldset>
