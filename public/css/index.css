@@ -58,7 +58,7 @@ body{
 
 
 fieldset{
-    width:100%;
+    width:680px;
     color: #717171;
 }
 
@@ -75,9 +75,6 @@ legend{
     font-weight: bold;
     margin-right: auto;
     margin-left:auto;
-    border:1px solid;
-    border-radius:3px;
-    border-color:lightgray;
     color: #717171;
 }
 
@@ -217,5 +214,8 @@ button:hover{
 }
 
 #i6ScreenSettingsDiv {
+    line-height: 1.5;
+}
+#systemServicesDiv{
     line-height: 1.5;
 }

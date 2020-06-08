@@ -4,10 +4,13 @@ var welcomePath;
 var dropzoneId ="Welcome";
 var wizJsonString;
 var service = [];
+var editService =[];
+var type = "";
+var editPath = "";
 const fs = require('fs');
 //const fse= require('fs-extra');
+
 const os = require('os');
-const copydir = require('copy-dir');
 const saveLocation = os.homedir() + "\\show";
 
 
@@ -308,6 +311,7 @@ function appendLeadingZeroes(n){
 
 //******************* add a new show button clicked *****************************
 function addNewShow(){
+    type="add"
     document.getElementById("startup").style.display = 'none';
     document.getElementById("flexShow").style.display = 'none';
     document.getElementById("flexShowText").style.display = 'none';
@@ -329,13 +333,109 @@ function addNewShow(){
 
 
 }
-
+// add code to fetch existing shows 888888888888888888888888888888888888888888888888
  function editExistingShow(){
-  // add code to fetch existing shows
+ type = "edit";
 
   console.log("Existing show goes here");
+  // open directory dialog
+     const remote = require("electron").remote;
+     const dialog = remote.dialog;
+     dialog.showOpenDialog(remote.getCurrentWindow(), {
+         properties: ["openDirectory" ],
+        // defaultPath :saveLocation,
+     }).then(result => {
+         if (result.canceled === false) {
+             console.log("Selected file paths:");
+             console.log(result.filePaths[0]);
+             editPath = result.filePaths[0];
+             findAllFolderAndDirectories(result.filePaths[0]);
+         }
+     }).catch(err => {
+         console.log(err)
+     })
+}
+//********************************************* FIND ALL FOLDERS AND DIRECTORIES  *****************************************
+function findAllFolderAndDirectories(showPath){
+
+    files = [];
+    fs.readdir(showPath, (err, files) => {
+
+        numFiles = [];
+        numDirectories = [];
+        console.log("There are this many files in the edit show directory: " + files.length);
+        for (i = 0; i < files.length; i++) {
+            if (fs.lstatSync(showPath + "\\" + files[i]).isFile()) {
+
+                console.log("file found: " + files[i]);
+                numFiles.push(files[i])
+
+            } else if (fs.lstatSync(showPath + "\\" + files[i]).isDirectory()) {
+                numDirectories.push(files[i]);
+              //  console.log('Directory found: ' + files[i]);
+                fs.readdir(showPath + '\\' + files[i], (err, filestot) => {
+                    console.log("directory: "+ files[i] + " " + filestot.length + ' files')
+                  //  numDirectories.push([files[i], filestot.length]);
+                });
+
+            }
+        }
+
+        //check and make sure it's a show folder
+        if(numDirectories.length==0){
+            console.log('Not Show')
+        }
+        for(j=0; j<numFiles.length; j++){
+            if((files[j] != 'Welcome.jpg') || (files[j] != 'wiz.dat') ){
+                console.log('Not Show2')
+
+                // need to return here
+            }
+        }
+        // we now have all the info need to populate the form
+        document.getElementById("startup").style.display = 'none';
+        document.getElementById("flexShow").style.display = 'none';
+        document.getElementById("flexShowText").style.display = 'none';
+        document.getElementById("mainDiv").style.visibility='visible';
+        document.getElementById("wizdat").style.display='inline-block';
+        document.getElementById("saveFileLocation").innerHTML = document.getElementById("saveFileLocation").innerHTML + "This show will be saved at: " + saveLocation; //display to user the save show location
+    //first the Welcome image gets populated here
+        let img = document.createElement("img");
+        try {
+            img.src = showPath + '\\Welcome.jpg';
+            welcomePath = showPath + '\\Welcome.jpg';
+            document.getElementById("Welcome").innerHTML = "Welcome Screen";
+            document.getElementById("Welcome").appendChild(img);
+            document.getElementById("Welcome").style.backgroundColor = 'white';
+        }
+        catch{
+            console.log('Welcome image not found')
+        }
+
+    //now for the wiz.dat info
+        readDatFile( showPath + "\\wiz.dat"); // put default values in form
+    // then add  services
+        for(i=0; i<editService.length; i++) {
+            var br = document.createElement("br");
+            var newService = document.createElement("Input");
+            newService.setAttribute('name', "Service" + count,);
+            newService.setAttribute('readonly', true);
+            newService.setAttribute('value', editService[i]);
+            var newServiceLabel = document.createElement("Label");
+            newServiceLabel.innerText = "Service" + count + " ";
+            count++;
+            service.push(editService[i]);
+            document.getElementById("systemServicesDiv").appendChild(newServiceLabel);
+            document.getElementById("systemServicesDiv").appendChild(newService);
+            if((count !=0) && (count % 2 ==0)){
+                document.getElementById("systemServicesDiv").appendChild(document.createElement("br"));
+            }
+        }
+
+    })
 }
 
+//********************************* ADD SERVICE ************************************
 async function addService() {
 
     const { value: serviceName } = await Swal.fire({
@@ -357,15 +457,32 @@ async function addService() {
         newServiceLabel.innerText="Service" + count + " ";
         count ++;
         service.push(serviceName);
-        document.getElementById("systemServidesDiv").appendChild(newServiceLabel);
-        document.getElementById("systemServidesDiv").appendChild(newService);
-        document.getElementById("systemServidesDiv").appendChild('&nbsp');
+        document.getElementById("systemServicesDiv").appendChild(newServiceLabel);
+        document.getElementById("systemServicesDiv").appendChild(newService);
+        if((count !=0) && (count % 2 ==0)){
+            document.getElementById("systemServicesDiv").appendChild(document.createElement("br"));
+        }
     }
 
 }
 
 //************************ Puts up a new div for each show folder ************************
 function addShowDiv(divId ){
+    let fileinfo = "";
+    let numberOfFiles=0;
+    if(type == "edit") {
+        let newestDir = editPath + '\\' + divId
+        fs.readdir(newestDir, (err, files) => {
+            console.log(files.length);
+            fileinfo=files.length + ' Files';
+        });
+
+
+    }
+    else{
+        fileinfo="0 Files";
+    }
+
     let div = document.createElement('div');
 
     div.setAttribute('class', 'showFlex');
@@ -393,7 +510,7 @@ function addShowDiv(divId ){
     div1.id= 'show' + divId+ 'Text';
     div1.setAttribute('class', 'divText');
     div1.addEventListener("click", imageClick, false);
-    div1.innerHTML = divId +  '<br/>' +  '0 Files';
+    div1.innerHTML = divId +  '<br/>' +  fileinfo;
     div1.name=divId;
     //div.style.height="100px";
     document.getElementById(divId).appendChild(div1);
@@ -437,7 +554,7 @@ function welcomeClick(){
         console.log(err)
     })
 }
-
+//************************************************** READ AND PARSE WIZ.DAT  *********************************************
 function readDatFile(filename) { //read the wiz.dat file and populate teh screen parameters with it.
     let parameter;
     let value;
@@ -472,7 +589,11 @@ function readDatFile(filename) { //read the wiz.dat file and populate teh screen
                         }
                     }
                     else{
+                        if((parameter.substring(0,7))== 'Service'){
+                        editService.push(value);
+                    }
                         document.getElementById(parameter).value = value;
+
                     }
                 }
                 catch {
