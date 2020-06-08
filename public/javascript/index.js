@@ -251,7 +251,7 @@ function saveConfigButton(){
         confirmButtonText: 'Yes, replace it!'
     }).then((result) => {
         if (result.value) {
-            console.log("save deefaults buton pressed");
+            console.log("save defaults buton pressed");
             let result = document.getElementById("wizdat").elements;
 
 
@@ -436,21 +436,42 @@ async function addService() {
     });
 
     if (serviceName) {
-     //   Swal.fire(`Entered Service: ` + serviceName)
-        var br = document.createElement("br");
-        var newService = document.createElement("Input");
-        newService.setAttribute('name', "Service"+ count, );
-      //  newService.setAttribute('readonly',false);
-        newService.setAttribute('value',serviceName);
-        var newServiceLabel=document.createElement("Label");
-        newServiceLabel.innerText="Service" + count + " ";
-        count ++;
-        service.push(serviceName);
-        document.getElementById("systemServicesDiv").appendChild(newServiceLabel);
-        document.getElementById("systemServicesDiv").appendChild(newService);
-        if((count !=0) && (count % 2 ==0)){
-            document.getElementById("systemServicesDiv").appendChild(document.createElement("br"));
-        }
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "New Service: " + serviceName + " will be created",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (!result.value) {
+                return;
+            }
+            else{
+
+                var br = document.createElement("br");
+                var newService = document.createElement("Input");
+                newService.setAttribute('name', "Service" + count,);
+                newService.setAttribute('readonly',false);
+                newService.setAttribute('value', serviceName);
+                var newServiceLabel = document.createElement("Label");
+                newServiceLabel.innerText = "Service" + count + " ";
+                count++;
+                service.push(serviceName);
+                document.getElementById("systemServicesDiv").appendChild(newServiceLabel);
+                document.getElementById("systemServicesDiv").appendChild(newService);
+                if ((count != 0) && (count % 2 == 0)) {
+                    document.getElementById("systemServicesDiv").appendChild(document.createElement("br"));
+                }
+            }
+
+        });
+
+
+
+
     }
 
 }
