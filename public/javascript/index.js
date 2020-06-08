@@ -149,10 +149,7 @@ function saveButton() {
             confirmButtonText: 'OK!'
         })
         return;  //get out now
-
     }
-
-
 
     let result = document.getElementById("wizdat").elements;
 
@@ -167,14 +164,6 @@ function saveButton() {
     }
     wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wiz.dat file
 
-  //  let result1 = document.getElementById("services").elements;
-
-  //  for (i=0 ; i<result1.length; i++) { //get all service inputs
-  //      wiz["service"] = wiz["service"] || []; // initialize wiz.service
- //       if (result1[i].type == "text") {
- //           wiz["service"].push(result1[i].value);
- //       }
- //   }
     showName = '\\' + document.getElementById('ShowName').value;
     wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
     wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
@@ -451,7 +440,7 @@ async function addService() {
         var br = document.createElement("br");
         var newService = document.createElement("Input");
         newService.setAttribute('name', "Service"+ count, );
-        newService.setAttribute('readonly',true);
+      //  newService.setAttribute('readonly',false);
         newService.setAttribute('value',serviceName);
         var newServiceLabel=document.createElement("Label");
         newServiceLabel.innerText="Service" + count + " ";
