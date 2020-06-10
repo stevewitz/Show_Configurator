@@ -7,6 +7,8 @@ var service = [];
 var editService =[];
 var type = "";
 var editPath = "";
+var files = [];
+
 const fs = require('fs');
 //const fse= require('fs-extra');
 
@@ -134,8 +136,55 @@ function dropShowFiles(divid, fromFolder){
     });
 }
 
+//******************** SAVE BUTTON FOR EDITING ****************
+function saveEditButton() {
+    console.log("save buton  in EDIT MODE pressed");
+    //change version now
+    let current_datetime = new Date();
+    let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate()) +appendLeadingZeroes(current_datetime.getHours())+appendLeadingZeroes(current_datetime.getMinutes());
+
+    document.getElementById("Version").value = formatted_date;// now put in updated version number
+
+    let result = document.getElementById("wizdat").elements;
+
+
+    for (i=0 ; i<result.length; i++){ //get all text  and number box inputs
+        if((result[i].type =="text") ||(result[i].type == "number") ) {
+            wiz[result[i].name] = result[i].value;
+        }
+        else if(result[i].type =="radio" && result[i].checked == true){ //get all radio button inputs
+            wiz[result[i].name] = result[i].value;
+        }
+    }
+    wiz["Version"]= formatted_date;
+    wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wiz.dat file
+
+    showName = '\\' + document.getElementById('ShowName').value;
+    wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
+    wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
+    // add save for wiz.dat here
+
+
+    for(i=0; i<service.length; i++){
+        console.log('Service ' + i + ' = '+ service[i]);
+        addShowDiv(service[i]);
+    }
+    document.getElementById("wizdat").style.display = 'none';
+    document.getElementById("buttons").style.display = 'none';
+    document.getElementById("flexShow").style.display = 'flex';
+    document.getElementById("flexShowText").style.display = 'block';
+
+}
+
 //******************** SAVE BUTTON  ***************************
 function saveButton() {
+
+    if(type == 'edit'){
+        saveEditButton(); // if we are editing go here instead
+        return;
+
+    }
+
     console.log("save buton pressed");
     if(service.length == 0){
         console.log("no services entered")
@@ -322,7 +371,7 @@ function addNewShow(){
 
 
 }
-// add code to fetch existing shows 888888888888888888888888888888888888888888888888
+//***********************  EDIT EXISTING SHOW  *******************************
  function editExistingShow(){
  type = "edit";
 
@@ -347,7 +396,7 @@ function addNewShow(){
 //********************************************* FIND ALL FOLDERS AND DIRECTORIES  *****************************************
 function findAllFolderAndDirectories(showPath){
 
-    files = [];
+
     fs.readdir(showPath, (err, files) => {
 
         numFiles = [];
