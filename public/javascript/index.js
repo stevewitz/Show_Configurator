@@ -188,7 +188,8 @@ function saveEditButton() {
     }
     document.getElementById("wizdat").style.display = 'none';
     document.getElementById("buttons").style.display = 'none';
-    document.getElementById("flexShow").style.display = 'flex';
+   // document.getElementById("flexShow").style.display = 'flex';
+    document.getElementById("folders").style.display = 'block';
     document.getElementById("flexShowText").style.display = 'block';
 
 }
@@ -301,7 +302,8 @@ function saveButton() {
      }
     document.getElementById("wizdat").style.display = 'none';
     document.getElementById("buttons").style.display = 'none';
-    document.getElementById("flexShow").style.display = 'flex';
+   // document.getElementById("flexShow").style.display = 'flex';
+    document.getElementById("folders").style.display = 'block';
     document.getElementById("flexShowText").style.display = 'block';
 }
 
@@ -369,7 +371,8 @@ function appendLeadingZeroes(n){
 function addNewShow(){
     type="add"
     document.getElementById("startup").style.display = 'none';
-    document.getElementById("flexShow").style.display = 'none';
+   // document.getElementById("flexShow").style.display = 'none';
+    document.getElementById("folders").style.display = 'none';
     document.getElementById("flexShowText").style.display = 'none';
     document.getElementById("mainDiv").style.visibility='visible';
     document.getElementById("wizdat").style.display='inline-block';
@@ -445,7 +448,8 @@ function findAllFolderAndDirectories(showPath){
         }
         // we now have all the info need to populate the form
         document.getElementById("startup").style.display = 'none';
-        document.getElementById("flexShow").style.display = 'none';
+       // document.getElementById("flexShow").style.display = 'none';
+        document.getElementById("folders").style.display = 'none';
         document.getElementById("flexShowText").style.display = 'none';
         document.getElementById("mainDiv").style.visibility='visible';
         document.getElementById("wizdat").style.display='inline-block';
@@ -692,4 +696,10 @@ function readDatFile(filename) { //read the wiz.dat file and populate teh screen
     } catch (err) {
         console.error(err);
     }
+}
+
+function exit() {
+    let app = remote.getCurrentWindow();
+    app.close();
+
 }
