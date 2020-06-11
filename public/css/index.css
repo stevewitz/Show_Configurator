@@ -140,6 +140,7 @@ button:hover{
 
 #saveFileLocation{
     font-weight: bold;
+    font-size: x-small;
     margin-right:auto;
     margin-left:auto;
     text-align: center;

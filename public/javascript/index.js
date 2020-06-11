@@ -95,6 +95,7 @@ function dropWelcome(place){
 
 //********************* Drop Show Folders Here  ******************************
 function dropShowFiles(divid, fromFolder){
+    let newdir ="";
   // let showName = '\\phantom2'; // REMOVE ThIS LINE +++++++++++++++++++++++++++++++++%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if((divid.substring((divid.length - 4)) !== 'Text')){   // make sure we are updating data to Text suffix div only
         divid = divid+ 'Text'
@@ -102,7 +103,7 @@ function dropShowFiles(divid, fromFolder){
 
     let divUpdate = document.getElementById(divid); // get the element before changing the divid to get the rood description
     let correctedCount = 0;
-    divUpdate.innerText = "testing";
+    divUpdate.innerText = divUpdate.innerText +"Working..";
     console.log("folder dropped into: "+ divid + " and sent from: " + fromFolder);
     if((divid.substring((divid.length - 4)) === 'Text')){   // if the id ends with Text, get rid of it.
         divid = divid.substring(4, divid.length - 4); //get rid of show prefix too
@@ -110,7 +111,14 @@ function dropShowFiles(divid, fromFolder){
     else{
         divid = divid.substring(4 ); //get rid of show prefix
     }
-   let newdir = (saveLocation + showName + '\\' + divid) ;  //.replace(/^.*(\\|\/|\:)/, '')); // get the correct save location for the files
+
+    if(type=="edit"){
+        newdir = (editPath + '\\' + divid) ;
+    }
+    else{
+         newdir = (saveLocation + showName + '\\' + divid) ;  //.replace(/^.*(\\|\/|\:)/, '')); // get the correct save location for the files
+    }
+
    // let newdir = 'C:\\Users\\Steve.WIZ\\show\\steve\\English' //divid;
     fs.readdir(fromFolder, (err, files) => {
         console.log("There are this many files to copy: "+files.length);
@@ -129,6 +137,7 @@ function dropShowFiles(divid, fromFolder){
           }
           else{
               correctedCount +=1;
+              console.log(" corrected count: "+ correctedCount);
           }
       }
       fs.readdir(newdir, (err, files) => {
@@ -137,6 +146,7 @@ function dropShowFiles(divid, fromFolder){
       });
 
     });
+    console.log("Exiting  DROP SHOW FILES");
 }
 
 //******************** SAVE BUTTON FOR EDITING ****************
@@ -166,7 +176,11 @@ function saveEditButton() {
     wizJsonString =  JSON.stringify(wiz ).replace(/,/g, '\r\n').replace(/"/g,'');
     wizJsonString = wizJsonString.substr(1,wizJsonString.length -2);
     // add save for wiz.dat here
-
+    fs.writeFile(editPath + "\\wiz.dat", wizJsonString, (err) => {
+        if (err) {
+            console.log("error creating wiz.dat " + err)
+        }
+    });
 
     for(i=0; i<service.length; i++){
         console.log('Service ' + i + ' = '+ service[i]);
@@ -214,6 +228,7 @@ function saveButton() {
             wiz[result[i].name] = result[i].value;
         }
     }
+    wiz["Version"]= document.getElementById("Version").value
     wiz["Nothing"] = "SHOW  SETTINGS";// don't now why, but this is in current wiz.dat file
 
     showName = '\\' + document.getElementById('ShowName').value;
@@ -434,7 +449,7 @@ function findAllFolderAndDirectories(showPath){
         document.getElementById("flexShowText").style.display = 'none';
         document.getElementById("mainDiv").style.visibility='visible';
         document.getElementById("wizdat").style.display='inline-block';
-        document.getElementById("saveFileLocation").innerHTML = document.getElementById("saveFileLocation").innerHTML + "This show will be saved at: " + saveLocation; //display to user the save show location
+        document.getElementById("saveFileLocation").innerHTML = document.getElementById("saveFileLocation").innerHTML + "This show will be saved at: " + showPath; //display to user the save show location
     //first the Welcome image gets populated here
         let img = document.createElement("img");
         try {
