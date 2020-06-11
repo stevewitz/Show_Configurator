@@ -504,8 +504,8 @@ async function addService() {
     if (serviceName) {
 
         Swal.fire({
-            title: 'Are you sure?',
-            text: "New Service: " + serviceName + " will be created",
+            title: 'Service ' +'"'+serviceName + '"' + ' will be created',
+            text: "Are you sure?",
             type: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -699,7 +699,35 @@ function readDatFile(filename) { //read the wiz.dat file and populate teh screen
 }
 
 function exit() {
-    let app = remote.getCurrentWindow();
-    app.close();
+    let showLocation = '';
+    if(type == 'edit') {
+        showLocation = editPath;
+    }
+    else if(type == 'add') {
+        showLocation = saveLocation;
+    }
+
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Files will be saved at: \n" + showLocation,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'YES'
+        }).then((result) => {
+            if (result.value === true) {
+
+                let app = remote.getCurrentWindow();
+                app.close();
+            }
+        });
+
+
+
+
+
+
 
 }
