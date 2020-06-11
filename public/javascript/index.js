@@ -7,9 +7,12 @@ var service = [];
 var editService =[];
 var type = "";
 var editPath = "";
-var files = [];
+var filesAndDirectories = [];
 
-const fs = require('fs');
+const remote = require("electron").remote;
+const dialog = remote.dialog;
+
+const fs = remote.require('fs');
 //const fse= require('fs-extra');
 
 const os = require('os');
@@ -130,7 +133,7 @@ function dropShowFiles(divid, fromFolder){
       }
       fs.readdir(newdir, (err, files) => {
           console.log("This many files have been copied: " + (files.length - correctedCount) + ' Skipped ' + correctedCount + ' directorie(s)');
-          divUpdate.innerText = divid + "\n" +  (i +1)+ ' Files Copied \n' + files.length + ' Total' ;
+          divUpdate.innerText = divid + "\n" +  (i +0)+ ' Files Copied \n' + files.length + ' Total' ;
       });
 
     });
@@ -138,7 +141,7 @@ function dropShowFiles(divid, fromFolder){
 
 //******************** SAVE BUTTON FOR EDITING ****************
 function saveEditButton() {
-    console.log("save buton  in EDIT MODE pressed");
+    console.log("save button  in EDIT MODE pressed");
     //change version now
     let current_datetime = new Date();
     let formatted_date =   current_datetime.getFullYear()+appendLeadingZeroes(current_datetime.getMonth() + 1) + appendLeadingZeroes(current_datetime.getDate()) +appendLeadingZeroes(current_datetime.getHours())+appendLeadingZeroes(current_datetime.getMinutes());
@@ -401,6 +404,7 @@ function findAllFolderAndDirectories(showPath){
 
         numFiles = [];
         numDirectories = [];
+        let place = "";
         console.log("There are this many files in the edit show directory: " + files.length);
         for (i = 0; i < files.length; i++) {
             if (fs.lstatSync(showPath + "\\" + files[i]).isFile()) {
@@ -410,12 +414,6 @@ function findAllFolderAndDirectories(showPath){
 
             } else if (fs.lstatSync(showPath + "\\" + files[i]).isDirectory()) {
                 numDirectories.push(files[i]);
-              //  console.log('Directory found: ' + files[i]);
-                fs.readdir(showPath + '\\' + files[i], (err, filestot) => {
-                    console.log("directory: "+ files[i] + " " + filestot.length + ' files')
-                  //  numDirectories.push([files[i], filestot.length]);
-                });
-
             }
         }
 
@@ -528,51 +526,64 @@ async function addService() {
 //************************ Puts up a new div for each show folder ************************
 function addShowDiv(divId ){
     let fileinfo = "";
+    let newestDir = "";
     let numberOfFiles=0;
-    if(type == "edit") {
-        let newestDir = editPath + '\\' + divId
+    if(type == 'edit') {
+        newestDir = editPath + '\\' + divId;
+    }
+    else{
+        newestDir = saveLocation + '\\' + divId;
+    }
         fs.readdir(newestDir, (err, files) => {
-            console.log(files.length);
-            fileinfo=files.length + ' Files';
+            if(files) {
+                console.log('Folder: ' + divId + " -- Files: " + files.length);
+                filesAndDirectories.push([divId, files.length]);
+                fileinfo = files.length + ' Files';
+            }
+            else{
+                fileinfo = '0 Files';
+            }
+            ///
+            ///
+            ///
+            let div = document.createElement('div');
+
+            div.setAttribute('class', 'showFlex');
+            div.id= divId;
+            div.name= divId;
+            // div.innerHTML  <p>divText</p>;
+
+            //div.style.height="100px";
+            document.getElementById("flexShow").appendChild(div);
+
+
+
+            var img = document.createElement("img");
+            img.class = "showFlex1";
+            img.id= 'show'+ divId;
+            img.src = "./public/Images/folder.png" ;
+            // img.style.height="100%";
+            //  img.style.marginRight="25px";
+            img.setAttribute('class', 'showFlex1');
+            img.name=divId;
+            img.addEventListener("click", imageClick, false);
+            var src = document.getElementById(divId);
+            src.appendChild(img)
+            let div1 = document.createElement('div');
+            div1.id= 'show' + divId+ 'Text';
+            div1.setAttribute('class', 'divText');
+            div1.addEventListener("click", imageClick, false);
+            div1.innerHTML = divId +  '<br/>' +  fileinfo;
+            div1.name=divId;
+            //div.style.height="100px";
+            document.getElementById(divId).appendChild(div1);
+
         });
 
 
-    }
-    else{
-        fileinfo="0 Files";
-    }
-
-    let div = document.createElement('div');
-
-    div.setAttribute('class', 'showFlex');
-    div.id= divId;
-    div.name= divId;
-   // div.innerHTML  <p>divText</p>;
-
-    //div.style.height="100px";
-    document.getElementById("flexShow").appendChild(div);
 
 
 
-    var img = document.createElement("img");
-    img.class = "showFlex1";
-    img.id= 'show'+ divId;
-    img.src = "./public/Images/folder.png" ;
-   // img.style.height="100%";
-  //  img.style.marginRight="25px";
-    img.setAttribute('class', 'showFlex1');
-    img.name=divId;
-    img.addEventListener("click", imageClick, false);
-    var src = document.getElementById(divId);
-    src.appendChild(img)
-    let div1 = document.createElement('div');
-    div1.id= 'show' + divId+ 'Text';
-    div1.setAttribute('class', 'divText');
-    div1.addEventListener("click", imageClick, false);
-    div1.innerHTML = divId +  '<br/>' +  fileinfo;
-    div1.name=divId;
-    //div.style.height="100px";
-    document.getElementById(divId).appendChild(div1);
 
 
 }
@@ -580,8 +591,7 @@ function addShowDiv(divId ){
 function imageClick(event){ //user has clicked on one of the show folders
     console.log(os.homedir());
     console.log("clicked: " + event.target.name);
-    const remote = require("electron").remote;
-    const dialog = remote.dialog;
+
     dialog.showOpenDialog(remote.getCurrentWindow(), {
         properties: ["openDirectory" ]
     }).then(result => {
