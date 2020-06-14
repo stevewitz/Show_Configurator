@@ -435,8 +435,8 @@ function findAllFolderAndDirectories(showPath){
             }
         }
 
-        //check and make sure it's a show folder
-        if(numDirectories.length!=0){
+        //check and make sure it's a  valid show folder
+        if(numDirectories.length!=0){ // must have show directories and contain Welcome.img and wiz.dat
             console.log('Show directory')
             a = 1;
         }
@@ -445,8 +445,6 @@ function findAllFolderAndDirectories(showPath){
                 b=1;
             if (numFiles[j] == 'wiz.dat') {
                 c=1;
-
-
             }
         }
         if(a+b+c !=3){
