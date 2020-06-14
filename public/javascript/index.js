@@ -416,7 +416,7 @@ function addNewShow(){
 }
 //********************************************* FIND ALL FOLDERS AND DIRECTORIES  *****************************************
 function findAllFolderAndDirectories(showPath){
-
+    let a, b , c =0;
 
     fs.readdir(showPath, (err, files) => {
 
@@ -436,15 +436,27 @@ function findAllFolderAndDirectories(showPath){
         }
 
         //check and make sure it's a show folder
-        if(numDirectories.length==0){
-            console.log('Not Show')
+        if(numDirectories.length!=0){
+            console.log('Show directory')
+            a = 1;
         }
         for(j=0; j<numFiles.length; j++){
-            if((files[j] != 'Welcome.jpg') || (files[j] != 'wiz.dat') ){
-                console.log('Not Show2')
+            if(numFiles[j] == 'Welcome.jpg')
+                b=1;
+            if (numFiles[j] == 'wiz.dat') {
+                c=1;
 
-                // need to return here
+
             }
+        }
+        if(a+b+c !=3){
+            console.log("NOT A VALID SHOW!");
+            Swal.fire(
+                'Not a valid show!',
+                'You selected an invalid show, please try again',
+                'error'
+            );
+            return;
         }
         // we now have all the info need to populate the form
         document.getElementById("startup").style.display = 'none';
@@ -511,18 +523,9 @@ async function addService() {
                     'Your entered a duplicate SERVICE, please try again',
                     'error'
                 );
-
-
-                return;
-
-
+                return; // exit function
             }
         }
-
-
-
-
-
 
         Swal.fire({
             title: 'Service ' +'"'+serviceName + '"' + ' will be created',
