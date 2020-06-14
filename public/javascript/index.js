@@ -503,6 +503,27 @@ async function addService() {
 
     if (serviceName) {
 
+        for(i=0; i<service.length; i++){
+            if(serviceName === service[i]){
+             //   alert("Duplicate service!");
+                Swal.fire(
+                    'Duplicate!',
+                    'Your entered a duplicate SERVICE, please try again',
+                    'error'
+                );
+
+
+                return;
+
+
+            }
+        }
+
+
+
+
+
+
         Swal.fire({
             title: 'Service ' +'"'+serviceName + '"' + ' will be created',
             text: "Are you sure?",
@@ -516,7 +537,6 @@ async function addService() {
                 return;
             }
             else{
-
                 var br = document.createElement("br");
                 var newService = document.createElement("Input");
                 newService.setAttribute('name', "Service" + count,);
@@ -532,14 +552,8 @@ async function addService() {
                     document.getElementById("systemServicesDiv").appendChild(document.createElement("br"));
                 }
             }
-
         });
-
-
-
-
     }
-
 }
 
 //************************ Puts up a new div for each show folder ************************
@@ -554,12 +568,11 @@ function addShowDiv(divId ){
         newestDir = saveLocation + '\\' + divId;
     }
         fs.readdir(newestDir, (err, files) => {
-            if(files) {
+            if (files) {
                 console.log('Folder: ' + divId + " -- Files: " + files.length);
                 filesAndDirectories.push([divId, files.length]);
                 fileinfo = files.length + ' Files';
-            }
-            else{
+            } else {
                 fileinfo = '0 Files';
             }
             ///
@@ -568,44 +581,38 @@ function addShowDiv(divId ){
             let div = document.createElement('div');
 
             div.setAttribute('class', 'showFlex');
-            div.id= divId;
-            div.name= divId;
+            div.id = divId;
+            div.name = divId;
             // div.innerHTML  <p>divText</p>;
 
             //div.style.height="100px";
             document.getElementById("flexShow").appendChild(div);
 
 
-
             var img = document.createElement("img");
             img.class = "showFlex1";
-            img.id= 'show'+ divId;
-            img.src = "./public/Images/folder.png" ;
+            img.id = 'show' + divId;
+            img.src = "./public/Images/folder.png";
             // img.style.height="100%";
             //  img.style.marginRight="25px";
             img.setAttribute('class', 'showFlex1');
-            img.name=divId;
+            img.name = divId;
             img.addEventListener("click", imageClick, false);
             var src = document.getElementById(divId);
             src.appendChild(img)
             let div1 = document.createElement('div');
-            div1.id= 'show' + divId+ 'Text';
+            div1.id = 'show' + divId + 'Text';
             div1.setAttribute('class', 'divText');
             div1.addEventListener("click", imageClick, false);
-            div1.innerHTML = divId +  '<br/>' +  fileinfo;
-            div1.name=divId;
+            div1.innerHTML = divId + '<br/>' + fileinfo;
+            div1.name = divId;
             //div.style.height="100px";
             document.getElementById(divId).appendChild(div1);
 
         });
-
-
-
-
-
-
-
 }
+
+
 //*************************  clicked file icon image to bring up opendialog  ******************************************
 function imageClick(event){ //user has clicked on one of the show folders
     console.log(os.homedir());
